@@ -2,30 +2,33 @@
   display: grid;
 
   grid-template-columns: 1.5fr 8.5fr;
-  grid-template-rows: 1fr 4fr;
+  grid-template-rows: 1fr 6fr;
   grid-template-areas: 
   "header groupTitle"
   "sidebar links";
+
 }
 header{
   grid-area: header;
-  border-right-style: solid;
-
+  background-color: #878787;
 }
 .links-header{
   grid-area: groupTitle;
   display: flex;
 }
-.openGroupButton{
-  
+.title{
+  display: flex;
+  justify-content: space-between;
 }
-
+.openGroup{
+  justify-content: flex-end;
+}
 .group-list{
   grid-area: sidebar;
-  border-right-style: solid;
 
 }
 .links-list{
+  background-color: #c9c9c9;
   grid-area: links;
   overflow:hidden;
   overflow-y:scroll;
@@ -36,14 +39,36 @@ ul {
   padding: 0;
 }
 .lul > li{
-  padding: 2.5px;
+  display: flex;
+  justify-content: space-between;
+  background-color: white;
+  margin: 3px 3px 3px 3px;
+  padding: 2.5px 0px 0px 2.5px;
   height: 24px;
+  white-space: nowrap;
   overflow: hidden;
-  border-bottom-style: solid;
+  text-overflow: clip;
+  overflow-x: scroll;
+  scrollbar-width: none;
+  border-radius: 5px;
+  /*
+  outline-style: solid;
+  outline-width: 1px;
+  outline-color: #696969;
+  */
 }
-
+.input_button_group{
+  display: flex;
+  height: 32px;
+}
+.addLink{
+  width: 32px;
+  border-radius: 5px 0px 0px 5px;
+}
 input {
-  width: 90%;
+  border-radius: 0px 5px 5px 0px;
+  border-left: none;
+  width: 95%;
 }
 
 h1 {

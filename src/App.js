@@ -8,8 +8,8 @@ function App() {
       </header>
 
       <div className='group-list'>
+      <button>+</button>
         <ul>
-          <li><button>new group</button></li>
           <li>py</li>
           <li>crypto</li>
           <li>react</li>
@@ -19,25 +19,26 @@ function App() {
       </div>
 
       <div className='header-list'>
-        <div>
-          <h3>py links</h3>
-          <button className="openGroupButton">Open Group</button>
-        </div>
-        <p>group notes: python nn project tutorials and useful tools</p>
-      </div>
+        <div className='title'>
+        <p><strong>py links</strong> python nn project tutorials and useful tools, project work scheduled for april or may at the latest</p>
 
+          <button className='openGroup'>Open Group</button>
+        </div>
+      </div>
       <nav className='links-list'>
+          <div className='input_button_group'><button className='addLink'>+</button><input></input></div>
           <ul className="lul">
-            <li><button>+</button><input></input></li>
-            <li>https://scrapy.org/</li>
-            <li>https://docs.bokeh.org/en/latest/docs/gallery/candlestick.html</li>
-            <li>https://medium.com/techie-delight/top-25-algorithms-every-programmer-should-know-373246b4881b</li>
-            <li>https://www.youtube.com/watch?v=Wa7IzKdg01c</li>
-            <li>https://machinelearningmastery.com/machine-learning-in-python-step-by-step/</li>
-            <li>https://docs.djangoproject.com/en/4.0/intro/tutorial01/</li>
-            <li>https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world</li>
-            <li>https://flask.palletsprojects.com/en/2.0.x/tutorial/</li>
+            <li>https://scrapy.org/<button>test</button></li>
+            <li>https://docs.bokeh.org/en/latest/docs/gallery/candlestick.html<button>test</button></li>
+            <li><div>https://medium.com/techie-delight/top-25-algorithms-every-programmer-should-know-373246b4881b</div><button>test</button></li>
+            <li>https://www.youtube.com/watch?v=Wa7IzKdg01c<button>test</button></li>
+            <li>https://machinelearningmastery.com/machine-learning-in-python-step-by-step/<button>test</button></li>
+            <li>https://docs.djangoproject.com/en/4.0/intro/tutorial01/<button>test</button></li>
+            <li>https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world<button>test</button></li>
+            <li>https://flask.palletsprojects.com/en/2.0.x/tutorial/<button>test</button></li>
           </ul>
+        
+          <div>delete group</div>
         </nav>
 
     </div>
