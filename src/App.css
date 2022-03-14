@@ -1,35 +1,66 @@
-body{
+.App{
+  display: grid;
+
+  grid-template-columns: 1.5fr 8.5fr;
+  grid-template-rows: 1fr 4fr;
+  grid-template-areas: 
+  "header groupTitle"
+  "sidebar links";
+}
+header{
+  grid-area: header;
+  border-right-style: solid;
+
+}
+.links-header{
+  grid-area: groupTitle;
   display: flex;
 }
-.App-header{
-  background-color: aliceblue;
-  display: grid;
-  grid-column: 1;
-  grid-row: 1;
+.openGroupButton{
+  
 }
 
 .group-list{
-  background-color: antiquewhite;
-  display: grid;
-  grid-column: 1;
-  grid-row: 2;
-}
+  grid-area: sidebar;
+  border-right-style: solid;
 
-.links-header{
-  background-color: aqua;
-  display: grid;
-  grid-column: 2;
-  grid-row: 1;
 }
-
 .links-list{
-  background-color: aqua;
-  display: grid;
-  grid-column: 2;
-  grid-row: 2;
+  grid-area: links;
+  overflow:hidden;
+  overflow-y:scroll;
 }
 ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
+.lul > li{
+  padding: 2.5px;
+  height: 24px;
+  overflow: hidden;
+  border-bottom-style: solid;
+}
+
+input {
+  width: 90%;
+}
+
+h1 {
+  font-size: 16px;
+}
+/*
+font sizes: 8,16,24,32
+*/
+/*
+padding sizes:2.5 ,5, 10, 15, 20
+*/
+/*
+colours black and white
+
+#696969 dim grey
+#878787 battleship grey
+#c9c9c9
+#858585
+#383838
+*/
