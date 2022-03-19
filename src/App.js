@@ -1,6 +1,23 @@
 import './App.css';
+import GroupDropdown from './groupDropdown';
 
 function App() {
+//https://www.google.com/search?q=chrome+context+menu+example&oq=chrome+context+menu&aqs=chrome.1.69i57j0i67j0i512l3j69i60l3.4968j0j4&sourceid=chrome&ie=UTF-8
+  //context menu: add to group
+  //context menu: create new group with tabs
+
+  //create group from button press
+
+  //add new group to json
+  //load groups from json
+  //delete group from json
+
+
+  //add link from json
+  //delete link from json
+
+
+
   return (
     <div className="App">
       <header>
@@ -22,20 +39,14 @@ function App() {
         <div className='title'>
         <p><strong>py links</strong> python nn project tutorials and useful tools, project work scheduled for april or may at the latest</p>
 
-          <button className='openGroup'>Open Group</button>
+          <GroupDropdown />
         </div>
       </div>
       <nav className='links-list'>
           <div className='input_button_group'><button className='addLink'>+</button><input></input></div>
           <ul className="lul">
-            <li>https://scrapy.org/<button>test</button></li>
-            <li>https://docs.bokeh.org/en/latest/docs/gallery/candlestick.html<button>test</button></li>
-            <li><div>https://medium.com/techie-delight/top-25-algorithms-every-programmer-should-know-373246b4881b</div><button>test</button></li>
-            <li>https://www.youtube.com/watch?v=Wa7IzKdg01c<button>test</button></li>
-            <li>https://machinelearningmastery.com/machine-learning-in-python-step-by-step/<button>test</button></li>
-            <li>https://docs.djangoproject.com/en/4.0/intro/tutorial01/<button>test</button></li>
-            <li>https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world<button>test</button></li>
-            <li>https://flask.palletsprojects.com/en/2.0.x/tutorial/<button>test</button></li>
+            <li className='link-item'><div className='linktext'>https://medium.com/techie-delight/top-25-algorithms-every-programmer-should-know-373246b4881b</div><button>\/</button></li>
+            
           </ul>
         
           <div>delete group</div>
