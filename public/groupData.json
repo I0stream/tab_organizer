@@ -1,0 +1,18 @@
+{
+    "groups": [{
+        "title": "general",
+        "description": "python nn project tutorials and useful tools, project work scheduled for april or may at the latest",
+        "links": ["google.com", "livecoinwatch.com", "tinyman.com"]
+    },{
+        "title": "py",
+        "description": "python nn project tutorials and useful tools, project work scheduled for april or may at the latest",
+        "links": ["google.com", "livecoinwatch.com", "tinyman.com"]
+    },{
+        "title": "daily",
+        "description": "python nn project tutorials and useful tools, project work scheduled for april or may at the latest",
+        "links": ["google.com", "livecoinwatch.com", "tinyman.com"]
+    }],
+    "selected": {"title": "daily",
+        "description": "python nn project tutorials and useful tools, project work scheduled for april or may at the latest",
+        "links": ["qwerty", "googog", ".com"]}
+}
