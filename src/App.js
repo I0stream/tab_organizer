@@ -12,13 +12,103 @@ function App() {
   //context menu: create new group with tabs
 
   //create group from button press
-  //add new group to json
   //load groups from json     X done
   //delete group from json
+
+  function addGroup(group){
+    //add to groups
+    console.log(typeof(groups))
+    groups.push(group)
+    //setGroups(groups)             //?
+    let obj = {groups, selected}
+    //update all json data
+    fetch('./groupData.json',
+    {
+      method: 'POST',
+      headers : { 
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+       },
+       body: JSON.stringify(obj),
+    })
+    .then(response => response.json())
+    .then(obj => {
+      console.log('Success:', obj);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+  }
+
+  ///i dont know if this will work
+  function deleteGroup(group){
+    fetch('./groupData.json',
+    {
+      method: 'DELETE',
+      headers : { 
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+       },
+       body: JSON.stringify(group),
+    })
+    .then(response => response.json())
+    .then(obj => {
+      console.log('Success:', obj);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+  }
 
 
   //add link from json
   //delete link from json
+  ///untested
+  function addlink(link){
+    //add to groups
+    selected.links.push(link)
+    setSelected(selected)         //?
+    let obj = {groups, selected}
+    //update all json data
+    fetch('./groupData.json',
+    {
+      method: 'POST',
+      headers : { 
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+       },
+       body: JSON.stringify(obj),
+    })
+    .then(response => response.json())
+    .then(obj => {
+      console.log('Success:', obj);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+  }
+
+  //untested
+  function deletelink(link){
+
+    fetch('./groupData.json',
+    {
+      method: 'DELETE',
+      headers : { 
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+       },
+       body: JSON.stringify(selected.links.link),
+    })
+    .then(response => response.json())
+    .then(obj => {
+      console.log('Success:', obj);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+  }
+
 
 
   function loadFromJson(){
@@ -41,7 +131,11 @@ function App() {
   }
   useEffect(()=>{loadFromJson()},[])
 
-
+  const testgroup = {
+    "title": "test",
+    "description": " the latest",
+    "links": ["monkey.com", "pets.com", "facebook.com"]
+}
 
 
   return (
@@ -51,7 +145,7 @@ function App() {
       </header>
 
       <div className='group-list'>
-      <button>+</button>
+      <button onClick={() => addGroup(testgroup)}>+</button>
         <ul>
         {
           groups && groups.length > 0 && groups.map((group)=><li key={group.title}>{group.title}</li>)
