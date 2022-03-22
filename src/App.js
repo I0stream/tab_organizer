@@ -12,32 +12,20 @@ function App() {
   //context menu: create new group with tabs
 
   //create group from button press
-  //load groups from json     X done
-  //delete group from json
+  //load groups 
+  //delete group 
+
+  //JSON IS NOT THE WAY, LOCAL STORAGE FOR LOCAL STORAGE REEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 
   function addGroup(group){
     //add to groups
     console.log(typeof(groups))
     groups.push(group)
     //setGroups(groups)             //?
-    let obj = {groups, selected}
+    let obj = {groups}
     //update all json data
-    fetch('./groupData.json',
-    {
-      method: 'POST',
-      headers : { 
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-       },
-       body: JSON.stringify(obj),
-    })
-    .then(response => response.json())
-    .then(obj => {
-      console.log('Success:', obj);
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
+    JSON.stringify(obj)
+
   }
 
   ///i dont know if this will work
@@ -125,6 +113,8 @@ function App() {
     })
     .then(function(myJson) {
       console.log(myJson);
+
+      //SET INITAL LOCAL STORAGE HERE THEN NIX THE JSON BS
       setGroups(myJson.groups)
       setSelected(myJson.selected)
     });
