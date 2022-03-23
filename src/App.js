@@ -15,37 +15,24 @@ function App() {
   //load groups 
   //delete group 
 
-  //JSON IS NOT THE WAY, LOCAL STORAGE FOR LOCAL STORAGE REEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+
+//Selected should jsut be an index and all updates should go to groups
+
+
 
   function addGroup(group){
     //add to groups
-    console.log(typeof(groups))
     groups.push(group)
-    //setGroups(groups)             //?
-    let obj = {groups}
-    //update all json data
-    JSON.stringify(obj)
-
+    setGroups(groups)
+    localStorage.setItem('groups', JSON.stringify(groups))
+    setSelected(group)
   }
 
   ///i dont know if this will work
   function deleteGroup(group){
-    fetch('./groupData.json',
-    {
-      method: 'DELETE',
-      headers : { 
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-       },
-       body: JSON.stringify(group),
-    })
-    .then(response => response.json())
-    .then(obj => {
-      console.log('Success:', obj);
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
+    groups = groups.filter(item => item !==group)
+    setGroups(groups)
+    localStorage.setItem('groups', JSON.stringify(groups))
   }
 
 
@@ -55,52 +42,38 @@ function App() {
   function addlink(link){
     //add to groups
     selected.links.push(link)
-    setSelected(selected)         //?
-    let obj = {groups, selected}
-    //update all json data
-    fetch('./groupData.json',
-    {
-      method: 'POST',
-      headers : { 
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-       },
-       body: JSON.stringify(obj),
-    })
-    .then(response => response.json())
-    .then(obj => {
-      console.log('Success:', obj);
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
+    setSelected(selected)
+    localStorage.setItem('selected', JSON.stringify(selected))
   }
+
+  /*
+  var testObject = { 'one': 1, 'two': 2, 'three': 3 };
+
+  // Put the object into storage
+  localStorage.setItem('testObject', JSON.stringify(testObject));
+
+  // Retrieve the object from storage
+  var retrievedObject = localStorage.getItem('testObject');
+
+  console.log('retrievedObject: ', JSON.parse(retrievedObject)); 
+*/
 
   //untested
   function deletelink(link){
-
-    fetch('./groupData.json',
-    {
-      method: 'DELETE',
-      headers : { 
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-       },
-       body: JSON.stringify(selected.links.link),
-    })
-    .then(response => response.json())
-    .then(obj => {
-      console.log('Success:', obj);
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
+    selected.links = selected.links.filter(item => item !==link)
+    setSelected(selected)
+    localStorage.setItem('selected', JSON.stringify(selected))
   }
 
 
 
   function loadFromJson(){
-    fetch('./groupData.json',
+
+    setGroups(JSON.parse(localStorage.getItem('groups')))
+    setSelected(JSON.parse(localStorage.getItem('selected')))
+
+
+    /*fetch('./groupData.json',
     {
       headers : { 
         'Content-Type': 'application/json',
@@ -114,17 +87,19 @@ function App() {
     .then(function(myJson) {
       console.log(myJson);
 
+      localStorage.setItem('groups', JSON.stringify(myJson.groups))
+      localStorage.setItem('selected', JSON.stringify(myJson.selected))
       //SET INITAL LOCAL STORAGE HERE THEN NIX THE JSON BS
       setGroups(myJson.groups)
       setSelected(myJson.selected)
-    });
+    });*/
   }
   useEffect(()=>{loadFromJson()},[])
 
   const testgroup = {
-    "title": "test",
-    "description": " the latest",
-    "links": ["monkey.com", "pets.com", "facebook.com"]
+    "title": "Empty Title",
+    "description": "Write a description here",
+    "links": []
 }
 
 
@@ -138,7 +113,7 @@ function App() {
       <button onClick={() => addGroup(testgroup)}>+</button>
         <ul>
         {
-          groups && groups.length > 0 && groups.map((group)=><li key={group.title}>{group.title}</li>)
+          groups && groups.length > 0 && groups.map((group)=><li key={group.title} onClick={() => setSelected(group)}>{group.title}</li>)
         }
         </ul>
       </div>
