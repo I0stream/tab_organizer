@@ -17,7 +17,7 @@ function App() {
 
 
 //Selected should jsut be an index and all updates should go to groups
-
+//groups[selected]
 
 
   function addGroup(group){
@@ -36,14 +36,11 @@ function App() {
   }
 
 
-  //add link from json
-  //delete link from json
-  ///untested
   function addlink(link){
     //add to groups
-    selected.links.push(link)
-    setSelected(selected)
-    localStorage.setItem('selected', JSON.stringify(selected))
+    groups[selected].links.push(link)
+    setGroups(groups)
+    localStorage.setItem('groups', JSON.stringify(groups))
   }
 
   /*
@@ -60,9 +57,9 @@ function App() {
 
   //untested
   function deletelink(link){
-    selected.links = selected.links.filter(item => item !==link)
-    setSelected(selected)
-    localStorage.setItem('selected', JSON.stringify(selected))
+    groups[selected].links = groups[selected].links.filter(item => item !==link)
+    setGroups(groups)
+    localStorage.setItem('groups', JSON.stringify(groups))
   }
 
 
@@ -72,8 +69,8 @@ function App() {
     setGroups(JSON.parse(localStorage.getItem('groups')))
     setSelected(JSON.parse(localStorage.getItem('selected')))
 
-
-    /*fetch('./groupData.json',
+    /*
+    fetch('./groupData.json',
     {
       headers : { 
         'Content-Type': 'application/json',
@@ -88,7 +85,7 @@ function App() {
       console.log(myJson);
 
       localStorage.setItem('groups', JSON.stringify(myJson.groups))
-      localStorage.setItem('selected', JSON.stringify(myJson.selected))
+      localStorage.setItem('selected', JSON.stringify(0))
       //SET INITAL LOCAL STORAGE HERE THEN NIX THE JSON BS
       setGroups(myJson.groups)
       setSelected(myJson.selected)
@@ -113,7 +110,7 @@ function App() {
       <button onClick={() => addGroup(testgroup)}>+</button>
         <ul>
         {
-          groups && groups.length > 0 && groups.map((group)=><li key={group.title} onClick={() => setSelected(group)}>{group.title}</li>)
+          groups && groups.length > 0 && groups.map((group)=><li key={group.title} onClick={() => setSelected(groups.indexOf(group))}>{group.title}</li>)
         }
         </ul>
       </div>
@@ -121,16 +118,16 @@ function App() {
         <div className='title'>
         <p>
           <strong>
-          {(selected && selected.title.length > 0) ? selected.title : "undefined"}
+          {(groups[selected] && groups[selected].title.length > 0) ? groups[selected].title : "undefined"}
           </strong>
-          {(selected && selected.description.length > 0) ? selected.description: "undefined"}
+          {(groups[selected] && groups[selected].description.length > 0) ? groups[selected].description: "undefined"}
           </p>
         </div>
       </div>
       <nav className='links-list'>
           <div className='input_button_group'><button className='addLink'>+</button><input></input></div>
           <LinksList
-            links = {(selected && selected.links.length > 0) ? selected.links: ["undefined"]}
+            links = {(groups[selected] && groups[selected].links.length > 0) ? groups[selected].links: ["undefined"]}
             
           />
           <div>delete group</div >
