@@ -1,7 +1,7 @@
 import './App.css';
 import {React, useState, useEffect} from 'react'
-import GroupDropdown from './groupDropdown';
-import LinksList from './LinksList';
+import GroupDropdown from './components/groupDropdown';
+import LinksList from './components/LinksList';
 
 function App() {
   
