@@ -1,5 +1,6 @@
 import React from 'react'
-import './dropdown.css'
+import '../stylesheets/dropdown.css'
+
 
 const GroupDropdown = () => {
 

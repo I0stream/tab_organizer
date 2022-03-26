@@ -1,10 +1,13 @@
 import React from 'react'
+import '../stylesheets/dropdown.css'
 
 const LinksList = (props) => {
+
+
     const myLinks = props.links.map((link) =>
     <li className='link-item' key={link}>
         <div className='linktext'>{link}</div>
-        <button>\/</button>
+        <button onClick={() => props.deletelinkprops(link)}>-</button>
     </li>
 
     )

@@ -1,12 +1,17 @@
-import './App.css';
+import './stylesheets/App.css';
 import {React, useState, useEffect} from 'react'
 import GroupDropdown from './components/groupDropdown';
+import './stylesheets/dropdown.css'
 import LinksList from './components/LinksList';
 
 function App() {
   
-  const [groups, setGroups] = useState()
-  const [selected, setSelected] = useState()
+  const [groups, setGroups] = useState([{
+    "title": "general",
+    "description": "python nn project tutorials and useful tools, project work scheduled for april or may at the latest",
+    "links": ["google.com", "livecoinwatch.com", "tinyman.com"]
+}])
+  const [selected, setSelected] = useState(0)
 //https://www.google.com/search?q=chrome+context+menu+example&oq=chrome+context+menu&aqs=chrome.1.69i57j0i67j0i512l3j69i60l3.4968j0j4&sourceid=chrome&ie=UTF-8
   //context menu: add to group
   //context menu: create new group with tabs
@@ -25,7 +30,7 @@ function App() {
     groups.push(group)
     setGroups(groups)
     localStorage.setItem('groups', JSON.stringify(groups))
-    setSelected(group)
+    setSelected(group.length - 1)
   }
 
   ///i dont know if this will work
@@ -43,19 +48,6 @@ function App() {
     localStorage.setItem('groups', JSON.stringify(groups))
   }
 
-  /*
-  var testObject = { 'one': 1, 'two': 2, 'three': 3 };
-
-  // Put the object into storage
-  localStorage.setItem('testObject', JSON.stringify(testObject));
-
-  // Retrieve the object from storage
-  var retrievedObject = localStorage.getItem('testObject');
-
-  console.log('retrievedObject: ', JSON.parse(retrievedObject)); 
-*/
-
-  //untested
   function deletelink(link){
     groups[selected].links = groups[selected].links.filter(item => item !==link)
     setGroups(groups)
@@ -63,41 +55,29 @@ function App() {
   }
 
 
-
   function loadFromJson(){
-
     setGroups(JSON.parse(localStorage.getItem('groups')))
     setSelected(JSON.parse(localStorage.getItem('selected')))
-
-    /*
-    fetch('./groupData.json',
-    {
-      headers : { 
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-       }
-    }
-    ).then(function(response){
-      console.log(response)
-      return response.json();
-    })
-    .then(function(myJson) {
-      console.log(myJson);
-
-      localStorage.setItem('groups', JSON.stringify(myJson.groups))
-      localStorage.setItem('selected', JSON.stringify(0))
-      //SET INITAL LOCAL STORAGE HERE THEN NIX THE JSON BS
-      setGroups(myJson.groups)
-      setSelected(myJson.selected)
-    });*/
   }
   useEffect(()=>{loadFromJson()},[])
+
 
   const testgroup = {
     "title": "Empty Title",
     "description": "Write a description here",
     "links": []
-}
+  }
+
+  function handleAddLink(){
+    
+    let linkText = document.getElementById("addLinkInput").value
+    console.log(linkText)
+    if (linkText == ""){
+      console.log("do nothing")
+    }else {
+      addlink(linkText)
+    }
+  }
 
 
   return (
@@ -125,10 +105,12 @@ function App() {
         </div>
       </div>
       <nav className='links-list'>
-          <div className='input_button_group'><button className='addLink'>+</button><input></input></div>
+
+          <div className='input_button_group'><button className='addLink' onClick={handleAddLink}>+</button><input id="addLinkInput"/></div>
+
           <LinksList
             links = {(groups[selected] && groups[selected].links.length > 0) ? groups[selected].links: ["undefined"]}
-            
+            deletelinkprops = {deletelink}
           />
           <div>delete group</div >
         </nav>
