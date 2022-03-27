@@ -17,8 +17,7 @@ header{
   display: flex;
 }
 .title{
-  display: flex;
-  justify-content: space-between;
+
 }
 .openGroup{
   justify-content: flex-end;

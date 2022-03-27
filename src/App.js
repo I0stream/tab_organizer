@@ -7,13 +7,17 @@ import LinksList from './components/LinksList';
 import { EditText } from 'react-edit-text';
 import 'react-edit-text/dist/index.css';
 
+import { v4 as uuidv4 } from 'uuid';
+
 
 function App() {
   
   const [groups, setGroups] = useState([{
     "title": "general",
     "description": "python nn project tutorials and useful tools, project work scheduled for april or may at the latest",
-    "links": ["google.com", "livecoinwatch.com", "tinyman.com"]
+    "links": ["google.com", "livecoinwatch.com", "tinyman.com"],
+    "uuid": uuidv4()
+
 }])
   const [selected, setSelected] = useState(0)
 //https://www.google.com/search?q=chrome+context+menu+example&oq=chrome+context+menu&aqs=chrome.1.69i57j0i67j0i512l3j69i60l3.4968j0j4&sourceid=chrome&ie=UTF-8
@@ -56,19 +60,20 @@ function App() {
     setGroups([...groups])
     localStorage.setItem('groups', JSON.stringify(groups))
   }
-  const testgroup = {
+  const emptyGroup = {
     "title": "Empty Title",
     "description": "Write a description here",
-    "links": []
+    "links": [],
+    "uuid": uuidv4()
   }
 
-  function loadFromJson(){
+  function initLoad(){
 
     let fgroups = JSON.parse(localStorage.getItem('groups'))
     let fselected = JSON.parse(localStorage.getItem('selected'))
 
     if (fgroups === null || fselected=== null){
-    setGroups([testgroup])
+    setGroups([emptyGroup])
     setSelected(0)
     localStorage.setItem('groups', JSON.stringify(groups))
     localStorage.setItem('selection', 0)
@@ -79,14 +84,14 @@ function App() {
     }
     
   }
-  useEffect(()=>{loadFromJson()},[])
+  useEffect(()=>{initLoad()},[])
 
 
   function handleAddLink(){
     
     let linkText = document.getElementById("addLinkInput").value
     console.log(linkText)
-    if (linkText == ""){
+    if (linkText === ""){
       console.log("do nothing")
     }else {
       addlink(linkText)
@@ -105,7 +110,6 @@ function App() {
     localStorage.setItem('groups', JSON.stringify(groups))
   }
   function updateTitle(title){
-    console.log(title)
     groups[selected].title = title.value
     setGroups([...groups])
     localStorage.setItem('groups', JSON.stringify(groups))
@@ -118,10 +122,10 @@ function App() {
       </header>
 
       <div className='group-list'>
-      <button onClick={() => addGroup(testgroup)}>+</button>
+      <button onClick={() => addGroup(emptyGroup)}>+</button>
         <ul>
         {
-          groups && groups.length > 0 && groups.map((group)=><li key={group.title} onClick={() => groupOnSelect(group)}>{group.title}</li>)
+          groups && groups.length > 0 && groups.map((group)=><li key={group.uuid} onClick={() => groupOnSelect(group)}>{group.title}</li>)
         }
         </ul>
       </div>
@@ -141,6 +145,7 @@ function App() {
             showEditButton
             defaultValue={(groups[selected] && groups[selected].description.length > 0) ? groups[selected].description: "undefined"}
           />
+          <button>Open Group</button>
         </div>
       </div>
 
