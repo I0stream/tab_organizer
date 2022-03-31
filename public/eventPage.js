@@ -9,6 +9,9 @@ chrome.contextMenus.create(contextMenuItem);
 
 chrome.contextMenus.onClicked.addListener( (clickData) => {
     if(clickData.menuItemId == "tutorial02"){
+        console.log(clickData.pageUrl)
+        console.log("log ran")
+
         alert("clicked point in page 👏👏")
     }
 })
