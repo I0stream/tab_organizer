@@ -5,13 +5,17 @@ var contextMenuItem ={
     "contexts": ['page']  /* to make this appear only when user selects something on page */
 }
 
+
+
 chrome.contextMenus.create(contextMenuItem);
 
 chrome.contextMenus.onClicked.addListener( (clickData) => {
     if(clickData.menuItemId == "tutorial02"){
-        console.log(clickData.pageUrl)
-        console.log("log ran")
-
-        alert("clicked point in page 👏👏")
+        chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+            let url = tabs[0].url;
+            alert("tab url is:", url)
+            //localStorage.setItem('currentUrl', JSON.stringify(url))
+            // use `url` here inside the callback because it's asynchronous!
+        });
     }
 })
