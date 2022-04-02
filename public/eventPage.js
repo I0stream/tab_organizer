@@ -12,8 +12,11 @@ async function getCurrentTab() {
         active: true,
         currentWindow: true
     }, function(tabs) {
+
         var tabURL = tabs[0].url;
-        alert(tabURL);
+        window.postMessage(tabURL, "FROM_EXT");
+        
+        //send data back to app js and save link to current group 
     });
 }
 
@@ -24,3 +27,5 @@ chrome.contextMenus.onClicked.addListener( (clickData) => {
         getCurrentTab()
     }
 })
+
+  

@@ -115,6 +115,16 @@ function App() {
     localStorage.setItem('groups', JSON.stringify(groups))
   }
 
+  window.addEventListener("message", event => {
+    if (event.source != window)
+      return;
+    const {tabs, type} = event.data;
+    // addlink(tabs)
+    if (type !== "FROM_EXT")
+      return;
+  });
+
+  
   return (
     <div className="App">
       <header>
