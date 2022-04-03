@@ -116,12 +116,13 @@ function App() {
   }
 
   window.addEventListener("message", event => {
-    if (event.source != window)
-      return;
-    const {tabs, type} = event.data;
-    // addlink(tabs)
-    if (type !== "FROM_EXT")
-      return;
+    alert(event.data)
+    if (event.source !== window){
+      return;}
+    const {tab, type} = event.data;
+    if (type !== "FROM_EXT"){
+      return;}
+    addlink(tab)
   });
 
   

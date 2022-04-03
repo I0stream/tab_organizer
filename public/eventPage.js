@@ -14,8 +14,7 @@ async function getCurrentTab() {
     }, function(tabs) {
 
         var tabURL = tabs[0].url;
-        window.postMessage(tabURL, "FROM_EXT");
-        
+        window.postMessage(tabURL.toString(), "FROM_EXT");
         //send data back to app js and save link to current group 
     });
 }
