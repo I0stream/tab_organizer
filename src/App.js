@@ -12,22 +12,25 @@ import { v4 as uuidv4 } from 'uuid';
 
 function App() {
   
-  const [groups, setGroups] = useState([{
+  /*const [groups, setGroups] = useState([{
     "title": "general",
     "description": "python nn project tutorials and useful tools, project work scheduled for april or may at the latest",
-    "links": [
-      "google.com",
-      "livecoinwatch.com",
-      "tinyman.com"],
+    "links": ["google.com", "livecoinwatch.com", "tinyman.com"],
     "uuid": uuidv4()
 
-}])
-//{"url" : tabURL.toString(), "title" : title, "favicon" : fav}
+}])*/
 
-//    "links": [{title: "google", link: "google.com"}, {title: "Live Cryptocurrency prices, charts", link: "livecoinwatch.com"}, "tinyman.com"],
-
+  const [groups, setGroups] = useState([{
+      "title": "general",
+      "description": "python nn project tutorials and useful tools, project work scheduled for april or may at the latest",
+      "links": [
+        {"title": "google", "url": "google.com", "favicon": "https://s2.googleusercontent.com/s2/favicons?domain_url=google.com"},
+        {"title": "Live Cryptocurrency prices, charts", "url": "livecoinwatch.com", "favicon": "https://s2.googleusercontent.com/s2/favicons?domain_url=livecoinwatch.com"},
+        {"title": "TinyMan|Decentralized trading", "url": "livecoinwatch.com", "favicon": "https://s2.googleusercontent.com/s2/favicons?domain_url=livecoinwatch.com"}],
+      "uuid": uuidv4()
+  }])
   const [selected, setSelected] = useState(0)
-//https://www.google.com/search?q=chrome+context+menu+example&oq=chrome+context+menu&aqs=chrome.1.69i57j0i67j0i512l3j69i60l3.4968j0j4&sourceid=chrome&ie=UTF-8
+
   //context menu: add to group
   //context menu: create new group with tabs
 
@@ -54,16 +57,8 @@ function App() {
     localStorage.setItem('groups', JSON.stringify(mygroups))
   }
 
-
-  function addlink(link){
-    //add to groups
-    groups[selected].links.push(link)
-    setGroups([...groups])
-    localStorage.setItem('groups', JSON.stringify(groups))
-  }
-
   function deletelink(link){
-    groups[selected].links = groups[selected].links.filter(item => item !==link)
+    groups[selected].links = groups[selected].links.filter(item => item !== link)
     setGroups([...groups])
     localStorage.setItem('groups', JSON.stringify(groups))
   }
@@ -94,17 +89,6 @@ function App() {
   useEffect(()=>{initLoad()},[])
 
 
-  function handleAddLink(){
-    
-    let linkText = document.getElementById("addLinkInput").value
-    console.log(linkText)
-    if (linkText === ""){
-      console.log("do nothing")
-    }else {
-      addlink(linkText)
-      document.getElementById("addLinkInput").value = ""
-    }
-  }
 
   function groupOnSelect(group){
     localStorage.setItem('selected', groups.indexOf(group))
@@ -127,24 +111,7 @@ function App() {
     //chrome.tabGroups.update(groupId, { collapsed: false, title: "title", color: "blue" });
   }
 
-  //Failed to execute 'postMessage' on 'Window': Invalid target origin in a call to 'postMessage'.
-  /*window.addEventListener("message", event => {
-    alert(event.data)
-    if (event.source !== window){
-      return;}
-
-    const {tab, type} = event.data;
-    addlink(tab)
-    if (tab == null){
-      return;
-    }
-
-    console.log(tab)
-    if (type !== "*"){
-      return;}
-
-  });*/
-
+  
   
   return (
     <div className="App">
@@ -182,7 +149,6 @@ function App() {
 
 
       <nav className='links-list'>
-          <div className='input_button_group'><button className='addLink' onClick={handleAddLink}>+</button><input id="addLinkInput"/></div>
           <LinksList
             links = {(groups[selected] && groups[selected].links.length > 0) ? groups[selected].links: ["undefined"]}
             deletelinkprops = {deletelink}
@@ -195,3 +161,42 @@ function App() {
 }
 
 export default App;
+
+
+/*function addlink(link){
+    //add to groups
+    groups[selected].links.push(link)
+    setGroups([...groups])
+    localStorage.setItem('groups', JSON.stringify(groups))
+  }*/
+
+/*
+  function handleAddLink(){
+    
+    let linkText = document.getElementById("addLinkInput").value
+    console.log(linkText)
+    if (linkText === ""){
+      console.log("do nothing")
+    }else {
+      addlink(linkText)
+      document.getElementById("addLinkInput").value = ""
+    }
+  }*/
+
+//Failed to execute 'postMessage' on 'Window': Invalid target origin in a call to 'postMessage'.
+  /*window.addEventListener("message", event => {
+    alert(event.data)
+    if (event.source !== window){
+      return;}
+
+    const {tab, type} = event.data;
+    addlink(tab)
+    if (tab == null){
+      return;
+    }
+
+    console.log(tab)
+    if (type !== "*"){
+      return;}
+
+  });*/
