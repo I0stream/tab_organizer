@@ -1,9 +1,20 @@
 
 var contextMenuItem ={
     "id": "tutorial02",
-    "title": "My Chrome context menu 👆", /* what appears in the menu */
-    "contexts": ['page']  /* to make this appear only when user selects something on page */
+    "title": "Add tab", /* what appears in the menu */
+    "contexts": ['page']
 }
+
+
+function addlink(linkstruct){
+    //add to groups
+
+    let fgroups = JSON.parse(localStorage.getItem('groups'))
+    let fselected = JSON.parse(localStorage.getItem('selected'))
+    fgroups[fselected].links.push(linkstruct)
+    
+    localStorage.setItem('groups', JSON.stringify(fgroups))
+  }
 
 //let queryOptions = { active: true, currentWindow: true };
 //let [tab] = await chrome.tabs.query(queryOptions);
@@ -12,12 +23,19 @@ async function getCurrentTab() {
         active: true,
         currentWindow: true
     }, function(tabs) {
-
+        
         var tabURL = tabs[0].url;
-        window.postMessage(tabURL.toString(), "FROM_EXT");
-        //send data back to app js and save link to current group 
+        var fav = tabs[0].favIconUrl
+        var title = tabs[0].title
+        alert( title)
+        if (tabURL == null){
+            return;
+        } else{
+            addlink({"url" : tabURL.toString(), "title" : title, "favicon" : fav})
+        }
     });
 }
+//chrome-extension://bhnhbbkncmdfpnnklchhollpcdfnnpoi/_generated_background_page.html
 
 chrome.contextMenus.create(contextMenuItem);
 

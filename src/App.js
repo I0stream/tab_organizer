@@ -15,10 +15,17 @@ function App() {
   const [groups, setGroups] = useState([{
     "title": "general",
     "description": "python nn project tutorials and useful tools, project work scheduled for april or may at the latest",
-    "links": ["google.com", "livecoinwatch.com", "tinyman.com"],
+    "links": [
+      "google.com",
+      "livecoinwatch.com",
+      "tinyman.com"],
     "uuid": uuidv4()
 
 }])
+//{"url" : tabURL.toString(), "title" : title, "favicon" : fav}
+
+//    "links": [{title: "google", link: "google.com"}, {title: "Live Cryptocurrency prices, charts", link: "livecoinwatch.com"}, "tinyman.com"],
+
   const [selected, setSelected] = useState(0)
 //https://www.google.com/search?q=chrome+context+menu+example&oq=chrome+context+menu&aqs=chrome.1.69i57j0i67j0i512l3j69i60l3.4968j0j4&sourceid=chrome&ie=UTF-8
   //context menu: add to group
@@ -114,16 +121,29 @@ function App() {
     setGroups([...groups])
     localStorage.setItem('groups', JSON.stringify(groups))
   }
+  async function OpenGroupHandler(){
+    
+    //var groupId = await chrome.tabs.group({ tabIds: tabId });
+    //chrome.tabGroups.update(groupId, { collapsed: false, title: "title", color: "blue" });
+  }
 
-  window.addEventListener("message", event => {
+  //Failed to execute 'postMessage' on 'Window': Invalid target origin in a call to 'postMessage'.
+  /*window.addEventListener("message", event => {
     alert(event.data)
     if (event.source !== window){
       return;}
+
     const {tab, type} = event.data;
-    if (type !== "FROM_EXT"){
-      return;}
     addlink(tab)
-  });
+    if (tab == null){
+      return;
+    }
+
+    console.log(tab)
+    if (type !== "*"){
+      return;}
+
+  });*/
 
   
   return (
@@ -156,7 +176,7 @@ function App() {
             showEditButton
             defaultValue={(groups[selected] && groups[selected].description.length > 0) ? groups[selected].description: "undefined"}
           />
-          <button>Open Group</button>
+          <button onClick={OpenGroupHandler()}>Open Group</button>
         </div>
       </div>
 
