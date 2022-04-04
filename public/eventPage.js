@@ -27,11 +27,10 @@ async function getCurrentTab() {
         var tabURL = tabs[0].url;
         var fav = tabs[0].favIconUrl
         var title = tabs[0].title
-        alert( title)
         if (tabURL == null){
             return;
         } else{
-            addlink({"url" : tabURL.toString(), "title" : title, "favicon" : fav})
+            addlink({"title" : title, "url" : tabURL.toString(), "favicon" : fav})
         }
     });
 }
