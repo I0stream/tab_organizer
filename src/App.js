@@ -1,3 +1,4 @@
+    /*global chrome*/
 import './stylesheets/App.css';
 import {React, useState, useEffect} from 'react'
 import GroupDropdown from './components/groupDropdown';
@@ -21,15 +22,24 @@ function App() {
 }])*/
 
   const [groups, setGroups] = useState([{
-      "title": "general",
-      "description": "python nn project tutorials and useful tools, project work scheduled for april or may at the latest",
-      "links": [
-        {"title": "google", "url": "google.com", "favicon": "https://s2.googleusercontent.com/s2/favicons?domain_url=google.com"},
-        {"title": "Live Cryptocurrency prices, charts", "url": "livecoinwatch.com", "favicon": "https://s2.googleusercontent.com/s2/favicons?domain_url=livecoinwatch.com"},
-        {"title": "TinyMan|Decentralized trading", "url": "livecoinwatch.com", "favicon": "https://s2.googleusercontent.com/s2/favicons?domain_url=livecoinwatch.com"}],
-      "uuid": uuidv4()
+    "title": "Empty Title",
+    "description": "Write a description here",
+    "links": [],
+    "uuid": uuidv4()
   }])
   const [selected, setSelected] = useState(0)
+
+
+  chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+        if (request.msg === "newLink") {
+            //  To do something
+            setGroups(JSON.parse(localStorage.getItem('groups'))
+            )
+        }
+    }
+);
+  //change 'selected' to uuid? and get index on startup?
 
   //context menu: add to group
   //context menu: create new group with tabs
@@ -70,7 +80,6 @@ function App() {
   }
 
   function initLoad(){
-
     let fgroups = JSON.parse(localStorage.getItem('groups'))
     let fselected = JSON.parse(localStorage.getItem('selected'))
 
@@ -88,8 +97,6 @@ function App() {
   }
   useEffect(()=>{initLoad()},[])
 
-
-
   function groupOnSelect(group){
     localStorage.setItem('selected', groups.indexOf(group))
     setSelected(groups.indexOf(group))
@@ -105,14 +112,31 @@ function App() {
     setGroups([...groups])
     localStorage.setItem('groups', JSON.stringify(groups))
   }
-  async function OpenGroupHandler(){
-    
-    //var groupId = await chrome.tabs.group({ tabIds: tabId });
-    //chrome.tabGroups.update(groupId, { collapsed: false, title: "title", color: "blue" });
+
+
+
+  function OpenGroupHandler(){
+    chrome.runtime.sendMessage({
+      msg: "openGroup"
+    });
   }
 
-  
-  
+  function Save(){
+    chrome.runtime.sendMessage({
+      msg: "save"
+    });
+  }
+  function addlink(link){
+    //add to groups
+    groups[selected].links.push(link)
+    setGroups([...groups])
+    localStorage.setItem('groups', JSON.stringify(groups))
+  }
+    //var groupId = await chrome.tabs.group({ tabIds: tabId });
+    //chrome.tabGroups.update(groupId, { collapsed: false, title: "title", color: "blue" });
+ 
+
+  //Tab Organizer
   return (
     <div className="App">
       <header>
@@ -134,26 +158,26 @@ function App() {
           <EditText
             name="titleText"
             onSave={updateTitle}
-            showEditButton
-            defaultValue={(groups[selected] && groups[selected].title.length > 0) ? groups[selected].title : "undefined"}
+            placeholder={(groups[selected] && groups[selected].title.length > 0) ? groups[selected].title : "undefined"}
           />
           <EditText
             name="descriptionText"
             onSave={updateDesc}
-            showEditButton
-            defaultValue={(groups[selected] && groups[selected].description.length > 0) ? groups[selected].description: "undefined"}
+            placeholder={(groups[selected] && groups[selected].description.length > 0) ? groups[selected].description: "undefined"}
           />
-          <button onClick={OpenGroupHandler()}>Open Group</button>
+          <button onClick={() => OpenGroupHandler()}>Open Group</button>
         </div>
       </div>
 
 
       <nav className='links-list'>
           <LinksList
-            links = {(groups[selected] && groups[selected].links.length > 0) ? groups[selected].links: ["undefined"]}
+            links = {(groups[selected] && groups[selected].links.length > 0) ? groups[selected].links : ["undefined"]}
             deletelinkprops = {deletelink}
           />
           <div><button onClick={() => deleteGroup(groups[selected])}>delete group</button></div>
+          <div><button onClick={() => Save()}>saveToCSV</button></div>
+
       </nav>
 
     </div>
@@ -162,6 +186,7 @@ function App() {
 
 export default App;
 
+//<div><button onClick={() => saveAllToCSV()}>saveToCSV</button></div>
 
 /*function addlink(link){
     //add to groups

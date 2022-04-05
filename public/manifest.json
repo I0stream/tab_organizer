@@ -22,6 +22,8 @@
 
   "permissions": [
     "contextMenus",
-    "tabs"
+    "tabs",
+    "downloads",
+    "storage"
   ]
   }
