@@ -23,7 +23,12 @@ header{
 }
 .group-list{
   grid-area: sidebar;
-
+}
+.groupitem{
+  text-align: center;
+  display: flex;
+  opacity: 0.5;
+  padding: 4px;
 }
 .links-list{
   background-color: #c9c9c9;

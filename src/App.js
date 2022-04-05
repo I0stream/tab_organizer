@@ -24,7 +24,7 @@ function App() {
   const [selected, setSelected] = useState(0)
 
   var headerColor = {
-    'background-color': groups[selected].color.toString()
+    'background-color': groups[selected].color.toString(),
   }
 
   const emptyGroup = {
@@ -33,7 +33,6 @@ function App() {
     "links": [],
     "uuid": uuidv4(),
     "color": chromeGroupColors[Math.floor(Math.random() * chromeGroupColors.length)]
-
   }
 
   function initLoad(){
@@ -59,6 +58,7 @@ function App() {
   function addGroup(group){
     //add to groups
     groups.push(group)
+    headerColor['background-color'] = group.color
     setGroups([...groups])//spread old array into a new one, for setstate to recognize it needs a rerender
     localStorage.setItem('groups', JSON.stringify(groups))
     setSelected(group.length - 1)
@@ -88,7 +88,7 @@ function App() {
   function groupOnSelect(group){
     localStorage.setItem('selected', groups.indexOf(group))
     setSelected(groups.indexOf(group))
-
+    setGroups([...groups])
   }
 
   function updateDesc(desc){
@@ -147,7 +147,7 @@ function App() {
         {
           groups && groups.length > 0 && groups.map(
             (group)=>
-              <li key={group.uuid} onClick={() => groupOnSelect(group)}>{group.title}</li>
+              <li className="groupitem" style={{'background-color': group.color}} key={group.uuid} onClick={() => groupOnSelect(group)}>{group.title}</li>
             )
         }
         </ul>
@@ -170,7 +170,7 @@ function App() {
       </div>
       <nav className='links-list'>
           <LinksList
-            links = {(groups[selected] && groups[selected].links.length > 0) ? groups[selected].links : ["undefined"]}
+            links = {groups[selected].links}
             deletelinkprops = {deletelink}
           />
           <div><button onClick={() => deleteGroup(groups[selected])}>delete group</button></div>

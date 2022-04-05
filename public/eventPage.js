@@ -96,31 +96,36 @@ async function OpenGroup(){
       });
       
       promise.then(
-            result =>{ 
-                var groupId = chrome.tabs.group({ tabIds: gIDs });
+            async result =>{ 
+                var groupId = await chrome.tabs.group({ tabIds: gIDs });
                 chrome.tabGroups.update(groupId, { collapsed: false, title: mytitle, color: gcolor })
             }
       )
     //using tab id make them into a group
-    }
-    
-    chrome.runtime.onMessage.addListener(
-        function(request, sender, sendResponse) {
-            if (request.msg === "save") {
-                //  To do something
-                SaveJson()
-            }
+}
+
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+        if (request.msg === "save") {
+            //  To do something
+            SaveJson()
         }
-    );
-    function SaveJson(){
-        let fgroups = JSON.parse(localStorage.getItem('groups'))
-        // Convert object to a string.
-        var result = JSON.stringify(fgroups);
-        
-        // Save as file
-        var url = 'data:application/json;base64,' + btoa(result);
-        chrome.downloads.download({
-            url: url,
-            filename: 'filename_of_exported_file.json'
-        });
     }
+);
+function SaveJson(){
+    let fgroups = JSON.parse(localStorage.getItem('groups'))
+    // Convert object to a string.
+    var result = JSON.stringify(fgroups);
+    
+    // Save as file
+    var url = 'data:application/json;base64,' + btoa(result);
+    chrome.downloads.download({
+        url: url,
+        filename: 'filename_of_exported_file.json'
+    });
+}
+
+/*function getExistingGroups(){
+    chrome.tabGroups.get)
+}*/
+
