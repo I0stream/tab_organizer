@@ -12,37 +12,49 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 function App() {
-  
-  /*const [groups, setGroups] = useState([{
-    "title": "general",
-    "description": "python nn project tutorials and useful tools, project work scheduled for april or may at the latest",
-    "links": ["google.com", "livecoinwatch.com", "tinyman.com"],
-    "uuid": uuidv4()
-
-}])*/
+  const chromeGroupColors = ["grey", "blue", "red", "yellow", "green", "pink", "purple", "cyan", "orange"]
 
   const [groups, setGroups] = useState([{
     "title": "Empty Title",
     "description": "Write a description here",
     "links": [],
-    "uuid": uuidv4()
+    "uuid": uuidv4(),
+    "color": chromeGroupColors[Math.floor(Math.random() * chromeGroupColors.length)]
   }])
   const [selected, setSelected] = useState(0)
 
+  var headerColor = {
+    'background-color': groups[selected].color.toString()
+  }
 
-  chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
-        if (request.msg === "newLink") {
-            //  To do something
-            setGroups(JSON.parse(localStorage.getItem('groups'))
-            )
-        }
+  const emptyGroup = {
+    "title": "Empty Title",
+    "description": "Write a description here",
+    "links": [],
+    "uuid": uuidv4(),
+    "color": chromeGroupColors[Math.floor(Math.random() * chromeGroupColors.length)]
+
+  }
+
+  function initLoad(){
+    let fgroups = JSON.parse(localStorage.getItem('groups'))
+    let fselected = JSON.parse(localStorage.getItem('selected'))
+
+    if (fgroups === null || fselected=== null){
+    setGroups([emptyGroup])
+    setSelected(0)
+    localStorage.setItem('groups', JSON.stringify(groups))
+    localStorage.setItem('selection', 0)
+
+    }else{
+      setGroups(fgroups)
+      setSelected(fselected)
     }
-);
-  //change 'selected' to uuid? and get index on startup?
+    
+  }
+  useEffect(()=>{initLoad()},[])
 
-  //context menu: add to group
-  //context menu: create new group with tabs
+  
 
   function addGroup(group){
     //add to groups
@@ -72,34 +84,11 @@ function App() {
     setGroups([...groups])
     localStorage.setItem('groups', JSON.stringify(groups))
   }
-  const emptyGroup = {
-    "title": "Empty Title",
-    "description": "Write a description here",
-    "links": [],
-    "uuid": uuidv4()
-  }
-
-  function initLoad(){
-    let fgroups = JSON.parse(localStorage.getItem('groups'))
-    let fselected = JSON.parse(localStorage.getItem('selected'))
-
-    if (fgroups === null || fselected=== null){
-    setGroups([emptyGroup])
-    setSelected(0)
-    localStorage.setItem('groups', JSON.stringify(groups))
-    localStorage.setItem('selection', 0)
-
-    }else{
-      setGroups(fgroups)
-      setSelected(fselected)
-    }
-    
-  }
-  useEffect(()=>{initLoad()},[])
 
   function groupOnSelect(group){
     localStorage.setItem('selected', groups.indexOf(group))
     setSelected(groups.indexOf(group))
+
   }
 
   function updateDesc(desc){
@@ -109,6 +98,11 @@ function App() {
   }
   function updateTitle(title){
     groups[selected].title = title.value
+    setGroups([...groups])
+    localStorage.setItem('groups', JSON.stringify(groups))
+  }
+  function updateColor(color){
+    groups[selected].color = color
     setGroups([...groups])
     localStorage.setItem('groups', JSON.stringify(groups))
   }
@@ -126,32 +120,38 @@ function App() {
       msg: "save"
     });
   }
-  function addlink(link){
-    //add to groups
-    groups[selected].links.push(link)
-    setGroups([...groups])
-    localStorage.setItem('groups', JSON.stringify(groups))
-  }
-    //var groupId = await chrome.tabs.group({ tabIds: tabId });
-    //chrome.tabGroups.update(groupId, { collapsed: false, title: "title", color: "blue" });
- 
+  chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+        if (request.msg === "newLink") {
+            //  To do something
+            setGroups(JSON.parse(localStorage.getItem('groups'))
+            )
+        }
+    }
+);
 
   //Tab Organizer
   return (
     <div className="App">
-      <header>
+      <header style={headerColor}>
         <h1>Tab Organizer</h1>
+        <GroupDropdown
+          colors={chromeGroupColors}
+          changeColor={updateColor}
+        />
       </header>
 
       <div className='group-list'>
-      <button onClick={() => addGroup(emptyGroup)}>+</button>
+        <button onClick={() => addGroup(emptyGroup)}>+</button>
         <ul>
         {
-          groups && groups.length > 0 && groups.map((group)=><li key={group.uuid} onClick={() => groupOnSelect(group)}>{group.title}</li>)
+          groups && groups.length > 0 && groups.map(
+            (group)=>
+              <li key={group.uuid} onClick={() => groupOnSelect(group)}>{group.title}</li>
+            )
         }
         </ul>
       </div>
-
 
       <div className='header-list'>
         <div className='title'>
@@ -168,8 +168,6 @@ function App() {
           <button onClick={() => OpenGroupHandler()}>Open Group</button>
         </div>
       </div>
-
-
       <nav className='links-list'>
           <LinksList
             links = {(groups[selected] && groups[selected].links.length > 0) ? groups[selected].links : ["undefined"]}
@@ -186,14 +184,10 @@ function App() {
 
 export default App;
 
-//<div><button onClick={() => saveAllToCSV()}>saveToCSV</button></div>
 
-/*function addlink(link){
-    //add to groups
-    groups[selected].links.push(link)
-    setGroups([...groups])
-    localStorage.setItem('groups', JSON.stringify(groups))
-  }*/
+
+
+
 
 /*
   function handleAddLink(){
@@ -225,3 +219,24 @@ export default App;
       return;}
 
   });*/
+
+  /*
+    function addlink(link){
+    //add to groups
+    groups[selected].links.push(link)
+    setGroups([...groups])
+    localStorage.setItem('groups', JSON.stringify(groups))
+  }
+    //var groupId = await chrome.tabs.group({ tabIds: tabId });
+    //chrome.tabGroups.update(groupId, { collapsed: false, title: "title", color: "blue" });
+ 
+ */
+
+      
+  /*const [groups, setGroups] = useState([{
+    "title": "general",
+    "description": "python nn project tutorials and useful tools, project work scheduled for april or may at the latest",
+    "links": ["google.com", "livecoinwatch.com", "tinyman.com"],
+    "uuid": uuidv4()
+
+}])*/

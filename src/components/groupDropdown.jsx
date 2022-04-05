@@ -2,18 +2,20 @@ import React from 'react'
 import '../stylesheets/dropdown.css'
 
 
-const GroupDropdown = () => {
+const GroupDropdown = (props) => {
+  
+  const myColors = props.colors.map((color) =>
+    <button key={color} onClick={()=>props.changeColor(color)}>{color}</button>
+  )
 
-    return(
-        <div className="dropdown">
-            <button className="dropbtn">Dropdown</button>
-            <div className="dropdown-content">
-                <a href="#">Delete group</a>
-                <a href="#">Link 2</a>
-                <a href="#">Link 3</a>
-            </div>
-        </div>
-    )
+  return(
+      <div className="dropdown">
+          <button className="dropbtn">V</button>
+          <div className="dropdown-content">
+              {myColors}
+          </div>
+      </div>
+  )
 }
 
 export default GroupDropdown

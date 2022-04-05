@@ -22,7 +22,7 @@ const LinksList = (props) => {
 
     return(
         <ul className="lul">
-            {(myLinks) ? myLinks : "please add a few links through the right click menu"}
+            {myLinks}
          </ul>
     )
 }

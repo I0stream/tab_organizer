@@ -82,6 +82,8 @@ async function OpenGroup(){
     let fselected = JSON.parse(localStorage.getItem('selected'))
 
     const glinks = fgroups[fselected].links
+    let mytitle = fgroups[fselected].title
+    let gcolor = fgroups[fselected].color
     var gIDs =[]
     //open tabs sequentially and save the tab id
     let promise = new Promise(function(resolve, reject) {
@@ -90,14 +92,13 @@ async function OpenGroup(){
                 gIDs.push(newTab.id)
             });
         })
-        setTimeout(() => resolve(gIDs), 1000);
+        setTimeout(() => resolve(gIDs), 500);
       });
       
       promise.then(
             result =>{ 
-                let mytitle = fgroups[fselected].title
                 var groupId = chrome.tabs.group({ tabIds: gIDs });
-                chrome.tabGroups.update(groupId, { collapsed: false, title: mytitle, color: "blue" })
+                chrome.tabGroups.update(groupId, { collapsed: false, title: mytitle, color: gcolor })
             }
       )
     //using tab id make them into a group

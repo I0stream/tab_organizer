@@ -10,7 +10,6 @@
 }
 header{
   grid-area: header;
-  background-color: #878787;
 }
 .links-header{
   grid-area: groupTitle;
