@@ -118,10 +118,10 @@ function SaveJson(){
     var result = JSON.stringify(fgroups);
     
     // Save as file
-    var url = 'data:application/json;base64,' + btoa(result);
+    var url = 'data:application/json;base64,' + btoa(unescape(encodeURIComponent(result)));
     chrome.downloads.download({
         url: url,
-        filename: 'filename_of_exported_file.json'
+        filename: 'groups.json'
     });
 }
 

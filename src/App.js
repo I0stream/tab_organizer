@@ -7,6 +7,7 @@ import LinksList from './components/LinksList';
 
 import { EditText } from 'react-edit-text';
 import 'react-edit-text/dist/index.css';
+import { DragDropContext,Droppable, Draggable } from 'react-beautiful-dnd';
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -48,12 +49,22 @@ function App() {
     }else{
       setGroups(fgroups)
       setSelected(fselected)
+      //addIndicesToLinks()
+      //localStorage.setItem('groups', JSON.stringify(groups))
     }
     
   }
   useEffect(()=>{initLoad()},[])
 
-  
+  //create stateful indices
+  function addIndicesToLinks(){
+    for(let i = 0; i < groups.length; i++){
+      groups[i]["index"] = i
+      for(let j = 0; i < groups[i].links.length; j++){
+        groups[i].links[j]["index"] = j
+      }
+    }
+  }
 
   function addGroup(group){
     //add to groups
@@ -130,6 +141,28 @@ function App() {
     }
 );
 
+
+function masterHandleOnDragEndLinks(result){
+  const items = groups[selected].links
+  const [reorderedItem] = items.splice(result.source.index, 1);
+  items.splice(result.destination.index, 0, reorderedItem);
+
+  groups[selected].links = items
+
+  setGroups([...groups])
+  localStorage.setItem('groups', JSON.stringify(groups))
+}
+
+function groupReorderHandler(result){
+  const items = groups
+  const [reorderedItem] = items.splice(result.source.index, 1);
+  items.splice(result.destination.index, 0, reorderedItem);
+
+  setGroups(items)
+  localStorage.setItem('groups', JSON.stringify(groups))
+}
+
+
   //Tab Organizer
   return (
     <div className="App">
@@ -139,18 +172,38 @@ function App() {
           colors={chromeGroupColors}
           changeColor={updateColor}
         />
+        <button onClick={() => addGroup(emptyGroup)}>+</button>
       </header>
 
       <div className='group-list'>
-        <button onClick={() => addGroup(emptyGroup)}>+</button>
-        <ul>
-        {
-          groups && groups.length > 0 && groups.map(
-            (group)=>
-              <li className="groupitem" style={{'background-color': group.color}} key={group.uuid} onClick={() => groupOnSelect(group)}>{group.title}</li>
-            )
-        }
-        </ul>
+      <DragDropContext onDragEnd={groupReorderHandler}>
+            <Droppable droppableId="groups">
+              {(provided) => (
+                <ul {...provided.droppableProps} ref={provided.innerRef}>
+                {
+                  groups && groups.length > 0 && groups.map(
+                    (group, index)=>(
+                      <Draggable key={group.title} draggableId={group.title} index={index}>
+                        {(provided) => (
+                          <li className="groupitem" 
+                            style={{'background-color': group.color}} 
+                            key={group.uuid} 
+                            onClick={() => groupOnSelect(group)}
+                            ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}
+                          >
+                            {group.title}
+                          </li>
+                        )}
+                      </Draggable>
+                    )
+                  )
+                }
+                 {provided.placeholder}
+
+                </ul>
+              )}
+          </Droppable>
+        </DragDropContext>
       </div>
 
       <div className='header-list'>
@@ -172,71 +225,14 @@ function App() {
           <LinksList
             links = {groups[selected].links}
             deletelinkprops = {deletelink}
+            handleOnDragEndLinks = {masterHandleOnDragEndLinks}
           />
           <div><button onClick={() => deleteGroup(groups[selected])}>delete group</button></div>
           <div><button onClick={() => Save()}>saveToCSV</button></div>
 
       </nav>
-
     </div>
   );
 }
 
 export default App;
-
-
-
-
-
-
-/*
-  function handleAddLink(){
-    
-    let linkText = document.getElementById("addLinkInput").value
-    console.log(linkText)
-    if (linkText === ""){
-      console.log("do nothing")
-    }else {
-      addlink(linkText)
-      document.getElementById("addLinkInput").value = ""
-    }
-  }*/
-
-//Failed to execute 'postMessage' on 'Window': Invalid target origin in a call to 'postMessage'.
-  /*window.addEventListener("message", event => {
-    alert(event.data)
-    if (event.source !== window){
-      return;}
-
-    const {tab, type} = event.data;
-    addlink(tab)
-    if (tab == null){
-      return;
-    }
-
-    console.log(tab)
-    if (type !== "*"){
-      return;}
-
-  });*/
-
-  /*
-    function addlink(link){
-    //add to groups
-    groups[selected].links.push(link)
-    setGroups([...groups])
-    localStorage.setItem('groups', JSON.stringify(groups))
-  }
-    //var groupId = await chrome.tabs.group({ tabIds: tabId });
-    //chrome.tabGroups.update(groupId, { collapsed: false, title: "title", color: "blue" });
- 
- */
-
-      
-  /*const [groups, setGroups] = useState([{
-    "title": "general",
-    "description": "python nn project tutorials and useful tools, project work scheduled for april or may at the latest",
-    "links": ["google.com", "livecoinwatch.com", "tinyman.com"],
-    "uuid": uuidv4()
-
-}])*/

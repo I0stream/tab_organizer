@@ -60,6 +60,7 @@ ul {
   justify-content: space-between;
 }
 .linktext{
+  text-align: left;
   overflow: hidden;
   text-overflow: clip;
   overflow-x: scroll;
@@ -81,28 +82,14 @@ input {
 h1 {
   font-size: 16px;
 }
-/*
-font sizes: 8,16,24,32
-*/
-/*
-padding sizes:2.5 ,5, 10, 15, 20
-*/
-/*
-colours black and white
-
-#696969 dim grey
-#878787 battleship grey
-#c9c9c9
-#858585
-#383838
-*/
 /* Hide scrollbar for Chrome, Safari and Opera */
-.example::-webkit-scrollbar {
-  display: none;
+
+.App li .drag {
+  margin-right: 15px;
+  cursor: move;
 }
 
-/* Hide scrollbar for IE, Edge and Firefox */
-.example {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+.App li svg {
+  height: 1rem;
+  color: #000;
 }
