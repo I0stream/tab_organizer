@@ -27,10 +27,10 @@ const LinksList = (props) => {
                             ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}
                         >
                             <img src={(link["favicon"] != null) ? link["favicon"]: backupFavicon} alt="" width="16" height="16" />
-                            <p className='linktext' onClick={() => openInNewTab(link["url"])}>
+                            <p className='linktext'>
                                 {(link["title"] != null) ? link["title"] : "error url"}
                             </p>
-                            <button onClick={() => props.deletelinkprops(link)}>-</button>
+                            <button onClick={(event) => {event.stopPropagation(); props.deletelinkprops(link);}}>-</button>
                         </li>
                     )}
                 </Draggable>

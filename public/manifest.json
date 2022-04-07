@@ -23,6 +23,7 @@
   "permissions": [
     "contextMenus",
     "tabs",
+    "tabGroups",
     "downloads",
     "storage"
   ]

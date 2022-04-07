@@ -1,5 +1,8 @@
 import React from 'react'
 import '../stylesheets/dropdown.css'
+import{FiChevronDown} from 'react-icons/fi';
+import { IconContext } from "react-icons";
+
 
 
 const GroupDropdown = (props) => {
@@ -7,10 +10,12 @@ const GroupDropdown = (props) => {
   const myColors = props.colors.map((color) =>
     <button key={color} onClick={()=>props.changeColor(color)}>{color}</button>
   )
-
+  const currentColor = props.buttonColor
   return(
       <div className="dropdown">
-          <button className="dropbtn">V</button>
+        <IconContext.Provider value={{ color: {currentColor}, className: "global-class-name" }}>
+          <div><FiChevronDown className="dropbtn" /></div>
+          </IconContext.Provider>
           <div className="dropdown-content">
               {myColors}
           </div>

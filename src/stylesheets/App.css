@@ -1,8 +1,8 @@
 .App{
   display: grid;
   max-width: 100%;
-  grid-template-columns: 1.5fr 8.5fr;
-  grid-template-rows: 1fr 6fr;
+  grid-template-columns: 1fr 8.5fr;
+  grid-template-rows: 0.5fr 6fr;
   grid-template-areas: 
   "header groupTitle"
   "sidebar links";
@@ -11,12 +11,23 @@
 header{
   grid-area: header;
 }
+
+.headerBar{
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+
+}
+.groupTitle{
+  font-size: small;
+  font-weight: normal;
+}
+.description{
+}
+
 .links-header{
   grid-area: groupTitle;
   display: flex;
-}
-.title{
-
 }
 .openGroup{
   justify-content: flex-end;
@@ -27,7 +38,14 @@ header{
 .groupitem{
   text-align: center;
   display: flex;
-  opacity: 0.5;
+  opacity: 0.7;
+  padding: 4px;
+  background-color: darkgray;
+}
+
+.groupitemactive{
+  text-align: center;
+  display: flex;
   padding: 4px;
 }
 .links-list{
@@ -84,12 +102,21 @@ h1 {
 }
 /* Hide scrollbar for Chrome, Safari and Opera */
 
-.App li .drag {
-  margin-right: 15px;
-  cursor: move;
-}
 
 .App li svg {
   height: 1rem;
   color: #000;
+}
+
+.colorButton{
+  width: 10px;
+  height: 10px;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+}
+.colorContainer{
+  margin:5px;
 }

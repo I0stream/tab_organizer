@@ -23,10 +23,37 @@ function App() {
     "color": chromeGroupColors[Math.floor(Math.random() * chromeGroupColors.length)]
   }])
   const [selected, setSelected] = useState(0)
+  //const [pallete, setPallete] = "black"
 
   var headerColor = {
     'background-color': groups[selected].color.toString(),
   }
+
+  function colorTranslate(chromeColor){
+    switch(chromeColor){
+      case "grey":
+        return "#DADCE0";
+      case "blue":
+        return "#93B4F2"
+      case "red":
+        return "#E39086";
+      case "yellow":
+        return "#F6D775";
+      case "green":
+        return "#91C799";
+      case "pink":
+        return "#F091C8";
+      case "purple":
+        return "#BB8CF2";
+      case "cyan":
+        return "#90D7E9";
+      case "orange":
+        return "#EFB07A";
+      default:
+        return "#FFF";
+    }
+  }
+
 
   const emptyGroup = {
     "title": "Empty Title",
@@ -71,8 +98,9 @@ function App() {
     groups.push(group)
     headerColor['background-color'] = group.color
     setGroups([...groups])//spread old array into a new one, for setstate to recognize it needs a rerender
+
     localStorage.setItem('groups', JSON.stringify(groups))
-    setSelected(group.length - 1)
+    //setSelected(group.length - 1)
   }
 
   function deleteGroup(group){
@@ -131,6 +159,12 @@ function App() {
       msg: "save"
     });
   }
+
+  function cycleColor(){
+    console.log(chromeGroupColors)
+    //cycle through them and apply the new color
+  }
+
   chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
         if (request.msg === "newLink") {
@@ -157,8 +191,9 @@ function groupReorderHandler(result){
   const items = groups
   const [reorderedItem] = items.splice(result.source.index, 1);
   items.splice(result.destination.index, 0, reorderedItem);
-
+  setSelected(result.destination.index)
   setGroups(items)
+  localStorage.setItem('selection', selected)
   localStorage.setItem('groups', JSON.stringify(groups))
 }
 
@@ -167,15 +202,16 @@ function groupReorderHandler(result){
   return (
     <div className="App">
       <header style={headerColor}>
-        <h1>Tab Organizer</h1>
-        <GroupDropdown
-          colors={chromeGroupColors}
-          changeColor={updateColor}
-        />
-        <button onClick={() => addGroup(emptyGroup)}>+</button>
+        <div class="colorContainer" style={headerColor}>
+          <button class="colorButton" onClick={()=>cycleColor}/>
+        </div>
+        <div>
+          <button onClick={() => OpenGroupHandler()}>Open</button>
+        </div>
       </header>
 
       <div className='group-list'>
+      <button onClick={() => addGroup(emptyGroup)}>+ New Group</button>
       <DragDropContext onDragEnd={groupReorderHandler}>
             <Droppable droppableId="groups">
               {(provided) => (
@@ -183,10 +219,14 @@ function groupReorderHandler(result){
                 {
                   groups && groups.length > 0 && groups.map(
                     (group, index)=>(
-                      <Draggable key={group.title} draggableId={group.title} index={index}>
+                      <Draggable 
+                        key={group.title} 
+                        draggableId={group.title} 
+                        index={index} 
+                        >
                         {(provided) => (
-                          <li className="groupitem" 
-                            style={{'background-color': group.color}} 
+                          <li 
+                            className={`${selected === index ? 'groupitemactive' : 'groupitem'}`}
                             key={group.uuid} 
                             onClick={() => groupOnSelect(group)}
                             ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}
@@ -195,10 +235,8 @@ function groupReorderHandler(result){
                           </li>
                         )}
                       </Draggable>
-                    )
-                  )
-                }
-                 {provided.placeholder}
+                ))}
+                {provided.placeholder}
 
                 </ul>
               )}
@@ -206,33 +244,65 @@ function groupReorderHandler(result){
         </DragDropContext>
       </div>
 
-      <div className='header-list'>
-        <div className='title'>
+        <div className='headerBar'>
           <EditText
             name="titleText"
             onSave={updateTitle}
             placeholder={(groups[selected] && groups[selected].title.length > 0) ? groups[selected].title : "undefined"}
+            inline
           />
+          <h1
+            className='groupTitle'
+            style={{"background-color": colorTranslate(groups[selected])}}
+          >{(groups[selected] && groups[selected].title.length > 0) ? groups[selected].title : "undefined"}</h1>
+
           <EditText
             name="descriptionText"
+            className='description'
             onSave={updateDesc}
             placeholder={(groups[selected] && groups[selected].description.length > 0) ? groups[selected].description: "undefined"}
+            inline
           />
-          <button onClick={() => OpenGroupHandler()}>Open Group</button>
+          <GroupDropdown
+            colors={chromeGroupColors}
+            changeColor={updateColor}
+            buttonColor={colorTranslate(groups[selected])}
+          />
         </div>
-      </div>
       <nav className='links-list'>
           <LinksList
             links = {groups[selected].links}
             deletelinkprops = {deletelink}
             handleOnDragEndLinks = {masterHandleOnDragEndLinks}
           />
-          <div><button onClick={() => deleteGroup(groups[selected])}>delete group</button></div>
-          <div><button onClick={() => Save()}>saveToCSV</button></div>
-
+          <div>
+            <button onClick={() => Save()}>Download</button>
+          </div>
       </nav>
     </div>
   );
 }
 
 export default App;
+
+
+/*<div className='headerBar'>
+        <div style={{headerColor}}>
+          <h1
+            className='groupTitle'
+            onClick={() => OpenGroupHandler()}
+          >{(groups[selected] && groups[selected].title.length > 0) ? groups[selected].title : "undefined"}</h1>
+        </div>
+
+        <input
+          className='description'
+          value={(groups[selected] && groups[selected].description.length > 0) ? groups[selected].description: "undefined"}
+          onSubmit={updateDesc}
+        />
+        
+        <GroupDropdown
+          colors={chromeGroupColors}
+          changeColor={updateColor}
+          buttonColor={colorTranslate(groups[selected])}
+        />
+      </div> */

@@ -96,9 +96,11 @@ async function OpenGroup(){
       });
       
       promise.then(
-            async result =>{ 
-                var groupId = await chrome.tabs.group({ tabIds: gIDs });
-                chrome.tabGroups.update(groupId, { collapsed: false, title: mytitle, color: gcolor })
+            result =>{ 
+                chrome.tabs.group({ tabIds: gIDs }, groupid => {
+                    //update to mv3
+                    chrome.tabGroups.update(groupid, { collapsed: true, title: mytitle.toString(), color: gcolor })
+                });
             }
       )
     //using tab id make them into a group
