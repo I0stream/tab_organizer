@@ -20,13 +20,13 @@ function App() {
     "description": "Write a description here",
     "links": [],
     "uuid": uuidv4(),
-    "color": chromeGroupColors[Math.floor(Math.random() * chromeGroupColors.length)]
+    "color": chromeGroupColors[0]
   }])
   const [selected, setSelected] = useState(0)
   //const [pallete, setPallete] = "black"
 
   var headerColor = {
-    'background-color': groups[selected].color.toString(),
+    'background-color': chromeGroupColors[0]
   }
 
   function colorTranslate(chromeColor){
@@ -60,8 +60,13 @@ function App() {
     "description": "Write a description here",
     "links": [],
     "uuid": uuidv4(),
-    "color": chromeGroupColors[Math.floor(Math.random() * chromeGroupColors.length)]
+    "color": chromeGroupColors[0]
   }
+  const safetyLink= {
+    "title":"Build an Algorand Web Wallet Interface Using Reach and React | Algorand Developer Portal",
+    "url":"https://developer.algorand.org/tutorials/web-wallet-algorand-reach-and-react/",
+    "favicon":"https://developer.algorand.org/favicon.ico"}
+  
 
   function initLoad(){
     let fgroups = JSON.parse(localStorage.getItem('groups'))
@@ -83,20 +88,10 @@ function App() {
   }
   useEffect(()=>{initLoad()},[])
 
-  //create stateful indices
-  function addIndicesToLinks(){
-    for(let i = 0; i < groups.length; i++){
-      groups[i]["index"] = i
-      for(let j = 0; i < groups[i].links.length; j++){
-        groups[i].links[j]["index"] = j
-      }
-    }
-  }
 
   function addGroup(group){
     //add to groups
-    groups.push(group)
-    headerColor['background-color'] = group.color
+    groups.unshift(group)//unshift?
     setGroups([...groups])//spread old array into a new one, for setstate to recognize it needs a rerender
 
     localStorage.setItem('groups', JSON.stringify(groups))
@@ -145,6 +140,18 @@ function App() {
     setGroups([...groups])
     localStorage.setItem('groups', JSON.stringify(groups))
   }
+  function cycleColor(){
+    console.log(chromeGroupColors)
+    var colorIndex = chromeGroupColors.indexOf(groups[selected].color)
+
+    if (colorIndex === chromeGroupColors.length - 1){
+      updateColor(chromeGroupColors(0))
+    } else{
+      updateColor(chromeGroupColors(colorIndex))
+    }
+
+    //cycle through them and apply the new color
+  }
 
 
 
@@ -158,11 +165,6 @@ function App() {
     chrome.runtime.sendMessage({
       msg: "save"
     });
-  }
-
-  function cycleColor(){
-    console.log(chromeGroupColors)
-    //cycle through them and apply the new color
   }
 
   chrome.runtime.onMessage.addListener(
@@ -201,9 +203,13 @@ function groupReorderHandler(result){
   //Tab Organizer
   return (
     <div className="App">
-      <header style={headerColor}>
-        <div class="colorContainer" style={headerColor}>
-          <button class="colorButton" onClick={()=>cycleColor}/>
+      <header>
+        <div class="colorContainer" >
+          <button class="colorButton" 
+            onClick={cycleColor}
+            style={{"background-color": 
+            (groups[selected] !== null) ? colorTranslate(groups[selected].color) : "#DADCE0" }}
+          />
         </div>
         <div>
           <button onClick={() => OpenGroupHandler()}>Open</button>
@@ -242,6 +248,9 @@ function groupReorderHandler(result){
               )}
           </Droppable>
         </DragDropContext>
+        <button
+          onClick={() => deleteGroup(groups[selected])}
+        >Delete Group</button>
       </div>
 
         <div className='headerBar'>
@@ -251,33 +260,34 @@ function groupReorderHandler(result){
             placeholder={(groups[selected] && groups[selected].title.length > 0) ? groups[selected].title : "undefined"}
             inline
           />
-          <h1
+          <button
             className='groupTitle'
-            style={{"background-color": colorTranslate(groups[selected])}}
-          >{(groups[selected] && groups[selected].title.length > 0) ? groups[selected].title : "undefined"}</h1>
+            style={{"background-color": 
+            (groups[selected] !== null) ? colorTranslate(groups[selected].color) : "#DADCE0"}}
+          >{(groups[selected] && groups[selected].title.length > 0) ? groups[selected].title : "undefined"}</button>
 
-          <EditText
-            name="descriptionText"
-            className='description'
-            onSave={updateDesc}
-            placeholder={(groups[selected] && groups[selected].description.length > 0) ? groups[selected].description: "undefined"}
-            inline
-          />
+          <input
+		        type="text"
+		        style={editMode}
+		        className={styles.textInput}
+		        value={(groups[selected] && groups[selected].description.length > 0) ? groups[selected].description: "undefined"}
+		        onSubmit={e => {
+		          updateDesc}
+		        onKeyDown={handleUpdatedDone}
+	      	/>
+
           <GroupDropdown
-            colors={chromeGroupColors}
-            changeColor={updateColor}
-            buttonColor={colorTranslate(groups[selected])}
+            className="gDropdown"
+            buttonColor={(groups[selected] !== null) ? colorTranslate(groups[selected].color) : "#DADCE0"}
+            Save={Save}
           />
         </div>
       <nav className='links-list'>
           <LinksList
-            links = {groups[selected].links}
+            links = {(groups[selected] !== null) ? groups[selected].links : [safetyLink]}
             deletelinkprops = {deletelink}
             handleOnDragEndLinks = {masterHandleOnDragEndLinks}
           />
-          <div>
-            <button onClick={() => Save()}>Download</button>
-          </div>
       </nav>
     </div>
   );

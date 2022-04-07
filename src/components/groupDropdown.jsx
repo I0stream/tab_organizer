@@ -7,17 +7,16 @@ import { IconContext } from "react-icons";
 
 const GroupDropdown = (props) => {
   
-  const myColors = props.colors.map((color) =>
-    <button key={color} onClick={()=>props.changeColor(color)}>{color}</button>
-  )
   const currentColor = props.buttonColor
+
   return(
       <div className="dropdown">
-        <IconContext.Provider value={{ color: {currentColor}, className: "global-class-name" }}>
-          <div><FiChevronDown className="dropbtn" /></div>
+        <IconContext.Provider value={{ color: currentColor, className: "global-class-name", size: 40 }}>
+          <div><FiChevronDown className="dropbtn"  /></div>
           </IconContext.Provider>
           <div className="dropdown-content">
-              {myColors}
+              <button>Edit</button>
+              <button onClick={props.Save}>Download</button>
           </div>
       </div>
   )

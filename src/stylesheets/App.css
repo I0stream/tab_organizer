@@ -19,12 +19,20 @@ header{
 
 }
 .groupTitle{
-  font-size: small;
   font-weight: normal;
+  border: none;
+  padding: 4px 8px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
 }
 .description{
 }
-
+.gDropdown{
+  display: inline-flex;
+  justify-content: flex-end;
+}
 .links-header{
   grid-area: groupTitle;
   display: flex;
@@ -108,15 +116,16 @@ h1 {
   color: #000;
 }
 
+
 .colorButton{
-  width: 10px;
-  height: 10px;
+  width: 20px;
+  height: 20px;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
   outline: none;
   cursor: pointer;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
 }
 .colorContainer{
-  margin:5px;
+  margin:10px;
 }
