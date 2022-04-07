@@ -15,7 +15,7 @@ const GroupDropdown = (props) => {
           <div><FiChevronDown className="dropbtn"  /></div>
           </IconContext.Provider>
           <div className="dropdown-content">
-              <button>Edit</button>
+              <button onClick={props.handleEditing}>Edit</button>
               <button onClick={props.Save}>Download</button>
           </div>
       </div>

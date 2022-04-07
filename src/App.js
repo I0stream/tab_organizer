@@ -23,11 +23,12 @@ function App() {
     "color": chromeGroupColors[0]
   }])
   const [selected, setSelected] = useState(0)
-  //const [pallete, setPallete] = "black"
+  //const [pallete, setPallete] = "darkmode"//or lightmode
+  const [editing, setEditing] = useState(false)
 
-  var headerColor = {
-    'background-color': chromeGroupColors[0]
-  }
+  let viewMode = {}
+	let editMode = {}
+
 
   function colorTranslate(chromeColor){
     switch(chromeColor){
@@ -140,25 +141,15 @@ function App() {
     setGroups([...groups])
     localStorage.setItem('groups', JSON.stringify(groups))
   }
+
   function cycleColor(){
-    console.log(chromeGroupColors)
     var colorIndex = chromeGroupColors.indexOf(groups[selected].color)
-
     if (colorIndex === chromeGroupColors.length - 1){
-      updateColor(chromeGroupColors(0))
+      updateColor(chromeGroupColors[0])
     } else{
-      updateColor(chromeGroupColors(colorIndex))
+      updateColor(chromeGroupColors[colorIndex+1])
     }
-
     //cycle through them and apply the new color
-  }
-
-
-
-  function OpenGroupHandler(){
-    chrome.runtime.sendMessage({
-      msg: "openGroup"
-    });
   }
 
   function Save(){
@@ -175,31 +166,49 @@ function App() {
             )
         }
     }
-);
+  );
 
+  function OpenGroupHandler(){
+    chrome.runtime.sendMessage({
+      msg: "openGroup"
+    });
+  }
 
-function masterHandleOnDragEndLinks(result){
-  const items = groups[selected].links
-  const [reorderedItem] = items.splice(result.source.index, 1);
-  items.splice(result.destination.index, 0, reorderedItem);
+  function masterHandleOnDragEndLinks(result){
+    const items = groups[selected].links
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
 
-  groups[selected].links = items
+    groups[selected].links = items
 
-  setGroups([...groups])
-  localStorage.setItem('groups', JSON.stringify(groups))
-}
+    setGroups([...groups])
+    localStorage.setItem('groups', JSON.stringify(groups))
+  }
 
-function groupReorderHandler(result){
-  const items = groups
-  const [reorderedItem] = items.splice(result.source.index, 1);
-  items.splice(result.destination.index, 0, reorderedItem);
-  setSelected(result.destination.index)
-  setGroups(items)
-  localStorage.setItem('selection', selected)
-  localStorage.setItem('groups', JSON.stringify(groups))
-}
+  function groupReorderHandler(result){
+    const items = groups
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+    setSelected(result.destination.index)
+    setGroups(items)
+    localStorage.setItem('selection', selected)
+    localStorage.setItem('groups', JSON.stringify(groups))
+  }
 
+  const handleUpdatedDone = event => {
+    if (event.key === "Enter") {
+      setEditing(false)
+    }
+  }
+  function handleEditing() {
+    setEditing(true)
+  }
 
+  if (editing) {
+    viewMode.display = "none"
+  } else {
+    editMode.display = "none"
+  }
   //Tab Organizer
   return (
     <div className="App">
@@ -210,9 +219,6 @@ function groupReorderHandler(result){
             style={{"background-color": 
             (groups[selected] !== null) ? colorTranslate(groups[selected].color) : "#DADCE0" }}
           />
-        </div>
-        <div>
-          <button onClick={() => OpenGroupHandler()}>Open</button>
         </div>
       </header>
 
@@ -254,30 +260,39 @@ function groupReorderHandler(result){
       </div>
 
         <div className='headerBar'>
-          <EditText
-            name="titleText"
-            onSave={updateTitle}
-            placeholder={(groups[selected] && groups[selected].title.length > 0) ? groups[selected].title : "undefined"}
-            inline
-          />
-          <button
+          
+          <div><button
             className='groupTitle'
+            onClick={() => OpenGroupHandler()}
             style={{"background-color": 
             (groups[selected] !== null) ? colorTranslate(groups[selected].color) : "#DADCE0"}}
           >{(groups[selected] && groups[selected].title.length > 0) ? groups[selected].title : "undefined"}</button>
-
           <input
 		        type="text"
 		        style={editMode}
-		        className={styles.textInput}
-		        value={(groups[selected] && groups[selected].description.length > 0) ? groups[selected].description: "undefined"}
-		        onSubmit={e => {
-		          updateDesc}
+		        className="textInput"
+		        value={(groups[selected] && groups[selected].title.length > 0) ? groups[selected].title: "undefined"}
+		        onSubmit={
+		          updateTitle}
 		        onKeyDown={handleUpdatedDone}
 	      	/>
 
+          <span
+            className='description'
+          >{(groups[selected] && groups[selected].description.length > 0) ? groups[selected].description: "undefined"}</span>
+          <input
+		        type="text"
+		        style={editMode}
+		        className="textInput"
+		        value={(groups[selected] && groups[selected].description.length > 0) ? groups[selected].description: "undefined"}
+		        onSubmit={
+		          updateDesc}
+		        onKeyDown={handleUpdatedDone}
+	      	/></div>
+
           <GroupDropdown
             className="gDropdown"
+            edit={handleEditing}
             buttonColor={(groups[selected] !== null) ? colorTranslate(groups[selected].color) : "#DADCE0"}
             Save={Save}
           />
@@ -295,6 +310,80 @@ function groupReorderHandler(result){
 
 export default App;
 
+
+/*const handleChange = id => {
+		setTodos(prevState =>
+			prevState.map(todo => {
+				if (todo.id === id ) {
+					return {
+						...todo,
+						completed: !todo.completed,
+					}
+				}
+				return todo
+			})
+		)
+	}
+*/
+
+/*const [editing, setEditing] = useState(false)
+
+	const handleEditing = () => {
+		setEditing(true)
+	}
+
+	const handleUpdatedDone = event => {
+		if (event.key === "Enter") {
+			setEditing(false)
+		}
+	}
+
+	
+	const { completed, id, title } = props.todo
+
+	let viewMode = {}
+	let editMode = {}
+
+	if (editing) {
+		viewMode.display = "none"
+	} else {
+		editMode.display = "none"
+	}
+
+
+	useEffect(() => {
+		return () => {
+			console.log("cleaning up...")
+		}
+	}, [])
+
+	return (
+		<li className={styles.item}>
+	      	<div onDoubleClick={handleEditing} style={viewMode}>
+		        <input
+			        type="checkbox"
+			        className={styles.checkbox}
+			        checked={completed}
+			        onChange={() => props.handleChangeProps(id)}
+		        />
+		        <button onClick={() => props.deleteTodoProps(id)}>
+		        	<FaTrash style={{ color: "orangered", fontSize: "16px" }} />
+		        </button>
+		        <span style={completed ? completedStyle : null}>{title}</span>
+	      	</div>
+	      	<input
+		        type="text"
+		        style={editMode}
+		        className={styles.textInput}
+		        value={title}
+		        onChange={e => {
+		          props.setUpdate(e.target.value, id)
+		        }}
+		        onKeyDown={handleUpdatedDone}
+	      	/>
+    	</li>
+	)
+*/
 
 /*<div className='headerBar'>
         <div style={{headerColor}}>
