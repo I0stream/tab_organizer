@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
 
-  "name": "My App Extension",
-  "description": "A basic chrome extension of react app. nothing too tedious",
+  "name": "Organizer",
+  "description": "Organize your tabs and tabgroups",
   "version": "0.1",
 
   "browser_action": {

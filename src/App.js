@@ -5,7 +5,6 @@ import GroupDropdown from './components/groupDropdown';
 import './stylesheets/dropdown.css'
 import LinksList from './components/LinksList';
 
-import { EditText } from 'react-edit-text';
 import 'react-edit-text/dist/index.css';
 import { DragDropContext,Droppable, Draggable } from 'react-beautiful-dnd';
 
@@ -149,6 +148,7 @@ function App() {
     } else{
       updateColor(chromeGroupColors[colorIndex+1])
     }
+    
     //cycle through them and apply the new color
   }
 
@@ -254,9 +254,7 @@ function App() {
               )}
           </Droppable>
         </DragDropContext>
-        <button
-          onClick={() => deleteGroup(groups[selected])}
-        >Delete Group</button>
+        
       </div>
 
         <div className='headerBar'>
@@ -310,6 +308,10 @@ function App() {
 
 export default App;
 
+
+/*<button
+          onClick={() => deleteGroup(groups[selected])}
+        >Delete Group</button>*/
 
 /*const handleChange = id => {
 		setTodos(prevState =>
@@ -405,3 +407,40 @@ export default App;
           buttonColor={colorTranslate(groups[selected])}
         />
       </div> */
+
+
+      /*v3 manifest
+
+      local storage no longer works in eventpage
+      
+      {
+  "manifest_version": 3,
+
+  "name": "Organizer",
+  "description": "Organize your tabs and tabgroups",
+  "version": "0.1",
+
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Open the popup"
+  },
+  "icons": {
+    "192": "logo192.png",
+    "512": "logo512.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+
+  "background": {
+    "service_worker": "eventPage.js"
+  },
+
+  "permissions": [
+    "contextMenus",
+    "tabs",
+    "tabGroups",
+    "downloads",
+    "storage"
+  ]
+  }*/

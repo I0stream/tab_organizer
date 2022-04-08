@@ -1,5 +1,6 @@
 body {
   min-width: 600px; /* your desired width */
+  max-height: 409.5px;
   max-width: 100%;
   position: relative;
   

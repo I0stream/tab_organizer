@@ -10,15 +10,15 @@ const GroupDropdown = (props) => {
   const currentColor = props.buttonColor
 
   return(
-      <div className="dropdown">
-        <IconContext.Provider value={{ color: currentColor, className: "global-class-name", size: 40 }}>
-          <div><FiChevronDown className="dropbtn"  /></div>
-          </IconContext.Provider>
-          <div className="dropdown-content">
-              <button onClick={props.handleEditing}>Edit</button>
-              <button onClick={props.Save}>Download</button>
-          </div>
-      </div>
+    <div className="dropdown">
+      <IconContext.Provider value={{ color: currentColor, className: "global-class-name", size: 30, style:{'padding': '0px', 'margin': '0px', 'textAlign': 'center'} }}>
+          <FiChevronDown className="dropbtn"  />
+      </IconContext.Provider>
+        <div className="dropdown-content">
+            <button onClick={props.handleEditing}>Edit</button>
+            <button onClick={props.Save}>Download</button>
+        </div>
+    </div>
   )
 }
 
