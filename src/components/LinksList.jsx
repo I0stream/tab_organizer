@@ -7,7 +7,6 @@ import { DragDropContext,Droppable, Draggable } from 'react-beautiful-dnd';
 
 
 const LinksList = (props) => {
-    const backupFavicon = "https://s2.googleusercontent.com/s2/favicons?domain_url=https://www.google.com"
 
     function openInNewTab(myurl){
         chrome.runtime.sendMessage({
@@ -26,11 +25,13 @@ const LinksList = (props) => {
                             onClick={() => openInNewTab(link["url"])} 
                             ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}
                         >
-                            <img src={(link["favicon"] != null) ? link["favicon"]: backupFavicon} alt="" width="16" height="16" />
+                            <img src={link["favicon"]} alt="" className='favicon' width="24" height="24" />
                             <p className='linktext'>
-                                {(link["title"] != null) ? link["title"] : "error url"}
+                                {link["title"]}
                             </p>
-                            <button onClick={(event) => {event.stopPropagation(); props.deletelinkprops(link);}}>-</button>
+                            <button 
+                            className='removeLinkButton'
+                            onClick={(event) => {event.stopPropagation(); props.deletelinkprops(link);}}>-</button>
                         </li>
                     )}
                 </Draggable>

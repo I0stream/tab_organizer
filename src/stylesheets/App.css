@@ -1,8 +1,8 @@
 .App{
   display: grid;
   max-width: 100%;
-  background-color: darkgray;
-  grid-template-columns: 1fr 8.5fr;
+  background-color: #212121;
+  grid-template-columns: 1.2fr 8.5fr;
   grid-template-rows: 0.5fr 6fr;
   grid-template-areas: 
   "header groupTitle"
@@ -11,11 +11,14 @@
 }
 header{
   grid-area: header;
-  background-color: white;
+  background-color: #212121;
+  color: #fff;
 }
 
 .headerBar{
-  background-color: white;
+  align-items: center;
+  background-color: #212121;
+  color: #fff;
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -28,11 +31,13 @@ header{
   text-decoration: none;
   display: inline-block;
   font-size: 12px;
-  border-radius: 8px;
+  border-radius: 7px;
   justify-content: flex-start;
 
   cursor: pointer;
 }
+
+
 .description{
   font-weight: normal;
   border: none;
@@ -57,50 +62,68 @@ header{
 }
 .group-list{
   grid-area: sidebar;
+  background-color: #292929;
 }
 .groupitem{
   text-align: center;
   display: flex;
-  opacity: 0.7;
-  padding: 4px;
-  background-color: darkgray;
+  opacity: 0.8;
+  padding: 6px;
+  color: white;
+
 }
 
 .groupitemactive{
   background-color: white;
   text-align: center;
   display: flex;
-  padding: 4px;
+  padding: 6px;
+  border-radius: 0px 7px 7px 0px;
 }
+
+ .groupitemactive .groupitem{
+   border-right-style: solid;
+   border: 2px;
+ }
+
 .links-list{
+  background-color: #292929;
   grid-area: links;
-  overflow:hidden;
-  overflow-y:scroll;
+  overflow: hidden;
+  overflow-y: scroll;
+  overflow: hidden;
 }
 ul {
   list-style: none;
   margin: 0;
   padding: 0;
-  overflow-y:auto
+  /*overflow-y:auto*/
 }
 .lul > li{
   display: flex;
-  background-color: white;
+  background-color: #494949;
+  color: #fff;
   margin: 3px 3px 3px 3px;
-  padding: 2.5px 0px 0px 2.5px;
-  border-radius: 5px;
+  padding: 3.5px 6px 2.5px 6px;
+  border-radius: 7px;
   white-space: nowrap;
 }
 .link-item {
-  display: flex;
   justify-content: space-between;
 }
 .linktext{
+  margin-top: 8px;
+  margin-bottom: 8px;
+
   text-align: left;
   overflow: hidden;
   text-overflow: clip;
-  overflow-x: scroll;
 }
+.favicon{
+  align-self: center;
+}
+
+
 .input_button_group{
   display: flex;
   height: 32px;
@@ -112,20 +135,13 @@ ul {
 input {
   border-radius: 0px 5px 5px 0px;
   border-left: none;
-  width: 95%;
+  width: 20%;
 }
 
 h1 {
   font-size: 16px;
 }
 /* Hide scrollbar for Chrome, Safari and Opera */
-
-
-.App li svg {
-  height: 1rem;
-  color: #000;
-}
-
 
 .colorButton{
   width: 20px;
@@ -136,6 +152,7 @@ h1 {
   cursor: pointer;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
 }
+
 .colorContainer{
   margin:10px;
 }
@@ -143,4 +160,54 @@ h1 {
   width: 100%;
   padding: 10px;
   border: 1px solid #dfdfdf;
+}
+.tertiaryButton{
+  font-size: small;
+  background: none;
+	color: lightgray;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
+
+.secondaryButton {
+  margin: 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 2px;
+  text-align: center;
+  text-decoration: none;
+  backface-visibility: hidden;
+  border: 2px solid transparent;
+  border-radius: 7px;
+  width: 95%;
+  cursor: pointer;
+}
+
+.deleteButton{
+  padding: 6px;
+  display: flex;
+  justify-content: end;
+}
+
+.bn36 {
+  border-color: #252525;
+  color: white;
+  background-color: #494949;
+  transition: transform 0.2s cubic-bezier(0.235, 0, 0.05, 0.95);
+}
+
+.bn36 :hover {
+  transform: perspective(1px) scale3d(1.044, 1.044, 1) translateZ(0) !important;
+}
+
+.removeLinkButton{
+  cursor: pointer;
+  font-size: large;
+  border:none;
+  background-color:transparent;
+  outline:none;
 }

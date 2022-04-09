@@ -11,12 +11,13 @@ const GroupDropdown = (props) => {
 
   return(
     <div className="dropdown">
-      <IconContext.Provider value={{ color: currentColor, className: "global-class-name", size: 30, style:{'padding': '0px', 'margin': '0px', 'textAlign': 'center'} }}>
+      <IconContext.Provider value={{ color: currentColor, className: "global-class-name", size: 35, style:{'padding': '0px', 'margin': '0px', 'textAlign': 'center'} }}>
           <FiChevronDown className="dropbtn"  />
       </IconContext.Provider>
         <div className="dropdown-content">
-            <button onClick={props.handleEditing}>Edit</button>
-            <button onClick={props.Save}>Download</button>
+          <button onClick={props.edit}>Edit</button>
+          <button onClick={props.Save}>Download</button>
+          <button onClick={props.delete} >Delete</button>
         </div>
     </div>
   )

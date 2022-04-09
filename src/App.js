@@ -15,7 +15,7 @@ function App() {
   const chromeGroupColors = ["grey", "blue", "red", "yellow", "green", "pink", "purple", "cyan", "orange"]
 
   const [groups, setGroups] = useState([{
-    "title": "Empty Title",
+    "title": "Empty",
     "description": "Write a description here",
     "links": [],
     "uuid": uuidv4(),
@@ -23,8 +23,8 @@ function App() {
   }])
   const [selected, setSelected] = useState(0)
   //const [pallete, setPallete] = "darkmode"//or lightmode
-  const [editing, setEditing] = useState(false)
 
+  const [editing, setEditing] = useState(false)
   let viewMode = {}
 	let editMode = {}
 
@@ -56,7 +56,7 @@ function App() {
 
 
   const emptyGroup = {
-    "title": "Empty Title",
+    "title": "Empty",
     "description": "Write a description here",
     "links": [],
     "uuid": uuidv4(),
@@ -98,19 +98,22 @@ function App() {
     //setSelected(group.length - 1)
   }
 
-  function deleteGroup(group){
-    if (selected === 0){
-      localStorage.setItem('selected', 1)
-      setSelected(1)
-    }else {
-      localStorage.setItem('selected', 0)
-      setSelected(0)
+  function deleteGroup(){
+        var result = window.confirm("Want to delete?");
+    if (result) {
+      let group = groups[selected]
+      if (selected === 0){
+        localStorage.setItem('selected', 1)
+        setSelected(1)
+      }else {
+        localStorage.setItem('selected', 0)
+        setSelected(0)
+      }
+      let mygroups = groups.filter(item => item !== group)
+      
+      setGroups([...mygroups])
+      localStorage.setItem('groups', JSON.stringify(mygroups))
     }
-
-    let mygroups = groups.filter(item => item !== group)
-    
-    setGroups([...mygroups])
-    localStorage.setItem('groups', JSON.stringify(mygroups))
   }
 
   function deletelink(link){
@@ -126,12 +129,10 @@ function App() {
   }
 
   function updateDesc(desc){
-    groups[selected].description = desc.value
     setGroups([...groups])
     localStorage.setItem('groups', JSON.stringify(groups))
   }
   function updateTitle(title){
-    groups[selected].title = title.value
     setGroups([...groups])
     localStorage.setItem('groups', JSON.stringify(groups))
   }
@@ -195,20 +196,34 @@ function App() {
     localStorage.setItem('groups', JSON.stringify(groups))
   }
 
+
   const handleUpdatedDone = event => {
     if (event.key === "Enter") {
+      updateDesc()
+      updateTitle()
       setEditing(false)
     }
   }
   function handleEditing() {
+    console.log("activate edit mode")
     setEditing(true)
   }
-
   if (editing) {
     viewMode.display = "none"
   } else {
     editMode.display = "none"
   }
+
+  
+  function editingTitle(newtitle) {
+    groups[selected].title = newtitle.target.value
+    setGroups([...groups])
+  }
+  function editingDesc(updatedDesc) {
+    groups[selected].description = updatedDesc.target.value
+    setGroups([...groups])
+  }
+
   //Tab Organizer
   return (
     <div className="App">
@@ -223,7 +238,9 @@ function App() {
       </header>
 
       <div className='group-list'>
-      <button onClick={() => addGroup(emptyGroup)}>+ New Group</button>
+      <button 
+        className='secondaryButton bn36'
+      onClick={() => addGroup(emptyGroup)}>+Group</button>
       <DragDropContext onDragEnd={groupReorderHandler}>
             <Droppable droppableId="groups">
               {(provided) => (
@@ -239,6 +256,9 @@ function App() {
                         {(provided) => (
                           <li 
                             className={`${selected === index ? 'groupitemactive' : 'groupitem'}`}
+                            style={{
+                              'border-color':(groups[selected] !== null) ? colorTranslate(groups[selected].color) : "#DADCE0"
+                            }}
                             key={group.uuid} 
                             onClick={() => groupOnSelect(group)}
                             ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}
@@ -259,32 +279,34 @@ function App() {
 
         <div className='headerBar'>
           
-          <div><button
+          <div style={{'display': 'flex'}}><div style={viewMode}><button
             className='groupTitle'
             onClick={() => OpenGroupHandler()}
             style={{"background-color": 
             (groups[selected] !== null) ? colorTranslate(groups[selected].color) : "#DADCE0"}}
-          >{(groups[selected] && groups[selected].title.length > 0) ? groups[selected].title : "undefined"}</button>
+          >{(groups[selected] && groups[selected].title.length > 0) ? groups[selected].title : "undefined"}</button></div>
+          
           <input
 		        type="text"
+            id="titleInput"
 		        style={editMode}
 		        className="textInput"
-		        value={(groups[selected] && groups[selected].title.length > 0) ? groups[selected].title: "undefined"}
-		        onSubmit={
-		          updateTitle}
+		        value={(groups[selected] && groups[selected].title.length > 0) ? groups[selected].title : "undefined"}
+            onChange={(e) => editingTitle(e)}
 		        onKeyDown={handleUpdatedDone}
 	      	/>
 
           <span
             className='description'
+            style={viewMode}
           >{(groups[selected] && groups[selected].description.length > 0) ? groups[selected].description: "undefined"}</span>
           <input
 		        type="text"
+            id="descInput"
 		        style={editMode}
 		        className="textInput"
 		        value={(groups[selected] && groups[selected].description.length > 0) ? groups[selected].description: "undefined"}
-		        onSubmit={
-		          updateDesc}
+            onChange={(e) => editingDesc(e)}
 		        onKeyDown={handleUpdatedDone}
 	      	/></div>
 
@@ -293,6 +315,7 @@ function App() {
             edit={handleEditing}
             buttonColor={(groups[selected] !== null) ? colorTranslate(groups[selected].color) : "#DADCE0"}
             Save={Save}
+            delete={deleteGroup}
           />
         </div>
       <nav className='links-list'>
