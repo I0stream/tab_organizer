@@ -216,11 +216,19 @@ function App() {
 
   
   function editingTitle(newtitle) {
-    groups[selected].title = newtitle.target.value
+    let nt = newtitle.target.value
+    if (newtitle.target.value === ""){
+      nt = "empty"
+    }
+    groups[selected].title = nt
     setGroups([...groups])
   }
   function editingDesc(updatedDesc) {
-    groups[selected].description = updatedDesc.target.value
+    let nd = updatedDesc.target.value
+    if (updatedDesc.target.value === ""){
+      nd = "empty"
+    }
+    groups[selected].description = nd
     setGroups([...groups])
   }
 
@@ -284,14 +292,14 @@ function App() {
             onClick={() => OpenGroupHandler()}
             style={{"background-color": 
             (groups[selected] !== null) ? colorTranslate(groups[selected].color) : "#DADCE0"}}
-          >{(groups[selected] && groups[selected].title.length > 0) ? groups[selected].title : "undefined"}</button></div>
+          >{(groups[selected] && groups[selected].title.length > 0) ? groups[selected].title : ""}</button></div>
           
           <input
 		        type="text"
             id="titleInput"
 		        style={editMode}
 		        className="textInput"
-		        value={(groups[selected] && groups[selected].title.length > 0) ? groups[selected].title : "undefined"}
+		        value={(groups[selected] && groups[selected].title.length > 0) ? groups[selected].title : ""}
             onChange={(e) => editingTitle(e)}
 		        onKeyDown={handleUpdatedDone}
 	      	/>
@@ -299,13 +307,13 @@ function App() {
           <span
             className='description'
             style={viewMode}
-          >{(groups[selected] && groups[selected].description.length > 0) ? groups[selected].description: "undefined"}</span>
+          >{(groups[selected] && groups[selected].description.length > 0) ? groups[selected].description: ""}</span>
           <input
 		        type="text"
             id="descInput"
 		        style={editMode}
 		        className="textInput"
-		        value={(groups[selected] && groups[selected].description.length > 0) ? groups[selected].description: "undefined"}
+		        value={(groups[selected] && groups[selected].description.length > 0) ? groups[selected].description: ""}
             onChange={(e) => editingDesc(e)}
 		        onKeyDown={handleUpdatedDone}
 	      	/></div>
